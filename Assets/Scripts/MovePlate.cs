@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//using win32;
 public class MovePlate : MonoBehaviour
 {
     public GameObject Controller;
