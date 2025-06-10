@@ -19,7 +19,6 @@ public class Chessman : MonoBehaviour
     public Sprite black_queen, black_knight, black_bishop, black_king, black_rook, black_pawn;
     public Sprite white_queen, white_knight, white_bishop, white_king, white_rook, white_pawn;
 
-    
     public void Activate()
     {
         Controller = GameObject.FindGameObjectWithTag("GameController");
@@ -43,7 +42,7 @@ public class Chessman : MonoBehaviour
             case "white_pawn": this.GetComponent<SpriteRenderer>().sprite = white_pawn; player = "white"; break;
         }
     }
-    //hgjhfjhgjhgjhg
+
     public void SetCoords()
     {
         float x = xBoard;
@@ -103,146 +102,72 @@ public class Chessman : MonoBehaviour
     // Making movement on chesspiece
     public void InitiateMovePlates()
     {
-        switch (this.name)
-        {
-            case "black_queen":
-            case "white_queen":
-                LineMovePlate(1, 0);
-                LineMovePlate(0, 1);
-                LineMovePlate(1, 1);
-                LineMovePlate(-1, 0);
-                LineMovePlate(0, -1);
-                LineMovePlate(-1, -1);
-                LineMovePlate(-1, 1);
-                LineMovePlate(1, -1);
-                break;
-            case "black_knight":
-            case "white_knight":
-                LMovePlate();
-                break;
-            case "black_bishop":
-            case "white_bishop":
-                LineMovePlate(1, 1);
-                LineMovePlate(1, -1);
-                LineMovePlate(-1, 1);
-                LineMovePlate(-1, -1);
-                break;
+        // Get only truly legal moves (those that don't leave the king in check)
+        List<Vector2Int> legalMoves = GetLegalMoves();
 
-            case "black_king":
-            case "white_king":
-                SurroundMovePlate();
-                break;
-            case "black_rook":
-            case "white_rook":
-                LineMovePlate(1, 0);
-                LineMovePlate(0, 1);
-                LineMovePlate(-1, 0);
-                LineMovePlate(0, -1);
-                break;
-            case "black_pawn":
-                PawnMovePlate(xBoard, yBoard - 1);
-                break;
-            case "white_pawn":
-                PawnMovePlate(xBoard, yBoard + 1);
-                break;
+        foreach (Vector2Int move in legalMoves)
+        {
+            // Check if the target position contains an enemy piece
+            Game sc = Controller.GetComponent<Game>();
+            GameObject targetPiece = sc.GetPosition(move.x, move.y);
+
+            if (targetPiece != null && targetPiece.GetComponent<Chessman>().player != player)
+            {
+                MovePlateAttactSpawn(move.x, move.y);
+            }
+            else
+            {
+                MovePlateSpawn(move.x, move.y);
+            }
         }
     }
 
-    public void LineMovePlate(int xIncrement, int yIncrement)
+    // Helper method to get all potential moves for line-moving pieces (Queen, Rook, Bishop)
+    private List<Vector2Int> GetLineMovesInternal(int xDir, int yDir)
     {
+        List<Vector2Int> result = new List<Vector2Int>();
         Game sc = Controller.GetComponent<Game>();
+        int x = xBoard + xDir;
+        int y = yBoard + yDir;
 
-        int x = xBoard + xIncrement;
-        int y = yBoard + yIncrement;
-
-        while(sc.PositionOnBoard(x,y) && sc.GetPosition(x,y) == null)
-        {
-            MovePlateSpawn(x,y);
-            x += xIncrement;
-            y += yIncrement;
-        }
-
-        if (sc.PositionOnBoard(x,y) && sc.GetPosition(x, y).GetComponent<Chessman>().player != player)
-        {
-            MovePlateAttactSpawn(x, y);
-        }
-    }
-
-    public void LMovePlate()
-    {
-        PointMovePlate(xBoard + 1, yBoard + 2);
-        PointMovePlate(xBoard - 1, yBoard + 2);
-        PointMovePlate(xBoard + 2, yBoard + 1);
-        PointMovePlate(xBoard + 2, yBoard - 1);
-        PointMovePlate(xBoard + 1, yBoard - 2);
-        PointMovePlate(xBoard - 1, yBoard - 2);
-        PointMovePlate(xBoard - 2, yBoard + 1);
-        PointMovePlate(xBoard - 2, yBoard - 1);
-    }
-
-    public void SurroundMovePlate()
-    {
-        PointMovePlate(xBoard, yBoard + 1);
-        PointMovePlate(xBoard, yBoard - 1);
-        PointMovePlate(xBoard - 1, yBoard - 1);
-        PointMovePlate(xBoard - 1, yBoard - 0);
-        PointMovePlate(xBoard - 1, yBoard + 1);
-        PointMovePlate(xBoard + 1, yBoard - 1);
-        PointMovePlate(xBoard + 1, yBoard - 0);
-        PointMovePlate(xBoard + 1, yBoard + 1);
-    }
-
-    public void PointMovePlate(int x, int y)
-    {
-        Game sc = Controller.GetComponent<Game>();
-        if (sc.PositionOnBoard(x, y))
+        while (sc.PositionOnBoard(x, y))
         {
             GameObject cp = sc.GetPosition(x, y);
             if (cp == null)
             {
-                MovePlateSpawn(x, y);
+                result.Add(new Vector2Int(x, y));
             }
-            else if (cp.GetComponent<Chessman>().player != player)
+            else
             {
-                MovePlateAttactSpawn(x, y);
+                // Add the enemy piece's position as a potential capture, then stop
+                if (cp.GetComponent<Chessman>().player != player)
+                    result.Add(new Vector2Int(x, y));
+                break; 
             }
+            x += xDir;
+            y += yDir;
         }
+        return result;
     }
 
-
-    public void PawnMovePlate(int x, int y)
+    // Helper method to add a single potential move (for Knight, King)
+    private void TryAddRawMove(int dx, int dy, List<Vector2Int> rawMovesList)
     {
         Game sc = Controller.GetComponent<Game>();
-        // Satu langkah maju
-        if (sc.PositionOnBoard(x, y) && sc.GetPosition(x, y) == null)
-        {
-            MovePlateSpawn(x, y);
+        int x = xBoard + dx;
+        int y = yBoard + dy;
 
-            // Dua langkah maju dari posisi awal
-            if (player == "white" && yBoard == 1 && sc.PositionOnBoard(x, y + 1) && sc.GetPosition(x, y + 1) == null)
+        if (sc.PositionOnBoard(x, y))
+        {
+            GameObject cp = sc.GetPosition(x, y);
+            if (cp == null || cp.GetComponent<Chessman>().player != player)
             {
-                MovePlateSpawn(x, y + 1);
+                rawMovesList.Add(new Vector2Int(x, y));
             }
-            else if (player == "black" && yBoard == 6 && sc.PositionOnBoard(x, y - 1) && sc.GetPosition(x, y - 1) == null)
-            {
-                MovePlateSpawn(x, y - 1);
-            }
-        }
-
-        // Cek serangan diagonal
-        if (sc.PositionOnBoard(x + 1, y) && sc.GetPosition(x + 1, y) != null && sc.GetPosition(x + 1, y).GetComponent<Chessman>().player != player)
-        {
-            MovePlateAttactSpawn(x + 1, y);
-        }
-
-        if (sc.PositionOnBoard(x - 1, y) && sc.GetPosition(x - 1, y) != null && sc.GetPosition(x - 1, y).GetComponent<Chessman>().player != player)
-        {
-            MovePlateAttactSpawn(x - 1, y);
         }
     }
 
-
-    public void MovePlateSpawn(int matrixX, int matrixY) 
+    public void MovePlateSpawn(int matrixX, int matrixY)
     {
         float x = matrixX;
         float y = matrixY;
@@ -279,25 +204,78 @@ public class Chessman : MonoBehaviour
         mpScript.SetCoords(matrixX, matrixY);
     }
 
-    //Logika Skakmat
-    public List<Vector2Int> GetLegalMoves()
+    // Helper cek king urip
+    private bool IsKingInCheckAfterMove(int oldX, int oldY, int newX, int newY)
     {
-        List<Vector2Int> moves = new List<Vector2Int>();
+        Game gameController = Controller.GetComponent<Game>();
+
+        // Store state
+        GameObject originalPieceAtNewPos = gameController.GetPosition(newX, newY);
+        bool originalPieceActive = false;
+        if (originalPieceAtNewPos != null)
+        {
+            originalPieceActive = originalPieceAtNewPos.activeSelf;
+            originalPieceAtNewPos.SetActive(false); 
+        }
+
+        // Simulate move
+        gameController.SetPositionEmpty(oldX, oldY);
+        int originalXBoard = xBoard;
+        int originalYBoard = yBoard;
+        xBoard = newX;
+        yBoard = newY;
+        gameController.SetPosition(this.gameObject); 
+
+        
+        GameObject king = gameController.FindKing(player);
+        bool kingInCheck = false;
+
+        if (king != null)
+        {
+
+            kingInCheck = gameController.IsUnderAttack(king.GetComponent<Chessman>().GetXBoard(), king.GetComponent<Chessman>().GetYBoard(), player);
+        }
+        else
+        {
+            // If the king is null, it means the king itself was captured by this move, which is an illegal state.
+            // So, this move is illegal as it leads to the king's capture.
+            kingInCheck = true;
+        }
+
+        // Undo move
+        gameController.SetPositionEmpty(newX, newY);
+        xBoard = originalXBoard;
+        yBoard = originalYBoard;
+        gameController.SetPosition(this.gameObject); // Place this piece back at old position
+
+        // Restore
+        if (originalPieceAtNewPos != null)
+        {
+            originalPieceAtNewPos.SetActive(originalPieceActive);
+            gameController.SetPosition(originalPieceAtNewPos);
+        }
+
+        return kingInCheck;
+    }
+
+    // ngitung move nggo illegal move
+    public List<Vector2Int> GetPotentialMoves() // tak ganti publik
+    {
+        List<Vector2Int> rawMoves = new List<Vector2Int>();
         Game sc = Controller.GetComponent<Game>();
 
-        // Gunakan kembali semua logika seperti di InitiateMovePlates, tetapi hanya hitung koordinat legal
         switch (this.name)
         {
             case "black_queen":
             case "white_queen":
-                moves.AddRange(GetLineMoves(1, 0));
-                moves.AddRange(GetLineMoves(0, 1));
-                moves.AddRange(GetLineMoves(1, 1));
-                moves.AddRange(GetLineMoves(-1, 0));
-                moves.AddRange(GetLineMoves(0, -1));
-                moves.AddRange(GetLineMoves(-1, -1));
-                moves.AddRange(GetLineMoves(-1, 1));
-                moves.AddRange(GetLineMoves(1, -1));
+                rawMoves.AddRange(GetLineMovesInternal(1, 0));
+                rawMoves.AddRange(GetLineMovesInternal(0, 1));
+                rawMoves.AddRange(GetLineMovesInternal(1, 1));
+                rawMoves.AddRange(GetLineMovesInternal(-1, 0));
+                rawMoves.AddRange(GetLineMovesInternal(0, -1));
+                rawMoves.AddRange(GetLineMovesInternal(-1, -1));
+                rawMoves.AddRange(GetLineMovesInternal(-1, 1));
+                rawMoves.AddRange(GetLineMovesInternal(1, -1));
                 break;
 
             case "white_knight":
@@ -307,16 +285,16 @@ public class Chessman : MonoBehaviour
                 {
                     int dx = knightMoves[i, 0];
                     int dy = knightMoves[i, 1];
-                    TryAddMove(dx, dy, moves);
+                    TryAddRawMove(dx, dy, rawMoves);
                 }
                 break;
 
             case "black_bishop":
             case "white_bishop":
-                moves.AddRange(GetLineMoves(1, 1));
-                moves.AddRange(GetLineMoves(-1, 1));
-                moves.AddRange(GetLineMoves(1, -1));
-                moves.AddRange(GetLineMoves(-1, -1));
+                rawMoves.AddRange(GetLineMovesInternal(1, 1));
+                rawMoves.AddRange(GetLineMovesInternal(-1, 1));
+                rawMoves.AddRange(GetLineMovesInternal(1, -1));
+                rawMoves.AddRange(GetLineMovesInternal(-1, -1));
                 break;
 
             case "black_king":
@@ -324,15 +302,15 @@ public class Chessman : MonoBehaviour
                 for (int dx = -1; dx <= 1; dx++)
                     for (int dy = -1; dy <= 1; dy++)
                         if (dx != 0 || dy != 0)
-                            TryAddMove(dx, dy, moves, oneStep: true);
+                            TryAddRawMove(dx, dy, rawMoves);
                 break;
 
             case "black_rook":
             case "white_rook":
-                moves.AddRange(GetLineMoves(1, 0));
-                moves.AddRange(GetLineMoves(0, 1));
-                moves.AddRange(GetLineMoves(-1, 0));
-                moves.AddRange(GetLineMoves(0, -1));
+                rawMoves.AddRange(GetLineMovesInternal(1, 0));
+                rawMoves.AddRange(GetLineMovesInternal(0, 1));
+                rawMoves.AddRange(GetLineMovesInternal(-1, 0));
+                rawMoves.AddRange(GetLineMovesInternal(0, -1));
                 break;
 
             case "black_pawn":
@@ -340,74 +318,48 @@ public class Chessman : MonoBehaviour
                 int dir = (player == "white") ? 1 : -1;
                 int startRow = (player == "white") ? 1 : 6;
 
+                // Forward 1
                 if (sc.PositionOnBoard(xBoard, yBoard + dir) && sc.GetPosition(xBoard, yBoard + dir) == null)
                 {
-                    moves.Add(new Vector2Int(xBoard, yBoard + dir));
-                    if (yBoard == startRow && sc.GetPosition(xBoard, yBoard + dir * 2) == null)
-                        moves.Add(new Vector2Int(xBoard, yBoard + dir * 2));
+                    rawMoves.Add(new Vector2Int(xBoard, yBoard + dir));
+                    // Forward 2
+                    if (yBoard == startRow && sc.PositionOnBoard(xBoard, yBoard + dir * 2) && sc.GetPosition(xBoard, yBoard + dir * 2) == null)
+                    {
+                        rawMoves.Add(new Vector2Int(xBoard, yBoard + dir * 2));
+                    }
                 }
 
+                // Diagonal captures
                 if (sc.PositionOnBoard(xBoard + 1, yBoard + dir))
                 {
                     var cp = sc.GetPosition(xBoard + 1, yBoard + dir);
                     if (cp != null && cp.GetComponent<Chessman>().player != player)
-                        moves.Add(new Vector2Int(xBoard + 1, yBoard + dir));
+                        rawMoves.Add(new Vector2Int(xBoard + 1, yBoard + dir));
                 }
-
                 if (sc.PositionOnBoard(xBoard - 1, yBoard + dir))
                 {
                     var cp = sc.GetPosition(xBoard - 1, yBoard + dir);
                     if (cp != null && cp.GetComponent<Chessman>().player != player)
-                        moves.Add(new Vector2Int(xBoard - 1, yBoard + dir));
+                        rawMoves.Add(new Vector2Int(xBoard - 1, yBoard + dir));
                 }
                 break;
         }
-
-        return moves;
+        return rawMoves;
     }
 
-    private List<Vector2Int> GetLineMoves(int xDir, int yDir)
+
+    // This method returns only truly legal moves (those that do not leave the king in check).
+    public List<Vector2Int> GetLegalMoves()
     {
-        List<Vector2Int> result = new List<Vector2Int>();
-        Game sc = Controller.GetComponent<Game>();
-        int x = xBoard + xDir;
-        int y = yBoard + yDir;
-
-        while (sc.PositionOnBoard(x, y))
+        List<Vector2Int> potentialMoves = GetPotentialMoves(); // Get all potential moves
+        List<Vector2Int> legalMoves = new List<Vector2Int>();
+        foreach (Vector2Int move in potentialMoves)
         {
-            GameObject cp = sc.GetPosition(x, y);
-            if (cp == null)
+            if (!IsKingInCheckAfterMove(xBoard, yBoard, move.x, move.y))
             {
-                result.Add(new Vector2Int(x, y));
-            }
-            else
-            {
-                if (cp.GetComponent<Chessman>().player != player)
-                    result.Add(new Vector2Int(x, y));
-                break;
-            }
-            x += xDir;
-            y += yDir;
-        }
-
-        return result;
-    }
-
-    private void TryAddMove(int dx, int dy, List<Vector2Int> moves, bool oneStep = false)
-    {
-        Game sc = Controller.GetComponent<Game>();
-        int x = xBoard + dx;
-        int y = yBoard + dy;
-
-        if (sc.PositionOnBoard(x, y))
-        {
-            GameObject cp = sc.GetPosition(x, y);
-            if (cp == null || cp.GetComponent<Chessman>().player != player)
-            {
-                moves.Add(new Vector2Int(x, y));
+                legalMoves.Add(move);
             }
         }
+        return legalMoves;
     }
-
 }
-

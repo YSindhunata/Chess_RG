@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Ice_Queen_0: 6407733534563608107
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

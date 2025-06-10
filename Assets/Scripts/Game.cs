@@ -2,21 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
-using TMPro;
-using UnityEngine.UI;
+using TMPro; 
+using UnityEngine.UI; 
+using UnityEngine.SceneManagement; 
 
 public class Game : MonoBehaviour
 {
-    
     public GameObject ChessPiece;
 
-    //Timer giliran 
+    // UI Elements for Game Over
+    public TextMeshProUGUI checkmateText; // Reference to the UI TextMeshPro element for "Checkmate!"
+    public Button restartButton; // Reference to the UI Button for "Restart"
+    public Button homeButton; // Reference to the UI Button for "Home"
+
+    // Timer giliran
     public TextMeshProUGUI turnTimerText;
     private float turnTime = 20f; // Durasi per giliran
     private float currentTimer = 20f;
     private bool timerRunning = true;
 
-    // Positions and team fir each chesspieces
+    // Positions and team for each chesspieces
     private GameObject[,] positions = new GameObject[8, 8];
     private GameObject[] playerBlack = new GameObject[16];
     private GameObject[] playerWhite = new GameObject[16];
@@ -41,11 +46,31 @@ public class Game : MonoBehaviour
         {
             Debug.Log("CHECKMATE! Winner: " + (currentPlayer == "white" ? "black" : "white"));
             gameOver = true;
-            timerRunning = false;
+            timerRunning = false; // Stop the timer
+            ShowGameOverUI(); /
         }
     }
 
-    //Logika skakmat
+    
+    private void ShowGameOverUI()
+    {
+        if (checkmateText != null)
+        {
+            // Set winner
+            checkmateText.text = "CHECKMATE!\n" + (currentPlayer == "white" ? "Black" : "White") + " Wins!";
+            checkmateText.gameObject.SetActive(true); //  text visible
+        }
+        if (restartButton != null)
+        {
+            restartButton.gameObject.SetActive(true); // restart button visible
+        }
+        if (homeButton != null)
+        {
+            homeButton.gameObject.SetActive(true); //  home button visible
+        }
+    }
+
+    // Logika skakmat
     public bool IsCheckmate(string player)
     {
         GameObject king = FindKing(player);
@@ -77,6 +102,7 @@ public class Game : MonoBehaviour
 
                 if (captured != null) captured.SetActive(false);
 
+                // Cek rojo iseh urip
                 bool stillInCheck = IsUnderAttack(FindKing(player).GetComponent<Chessman>().GetXBoard(), FindKing(player).GetComponent<Chessman>().GetYBoard(), player);
 
                 // Undo simulasi
@@ -84,8 +110,11 @@ public class Game : MonoBehaviour
                 cm.SetXBoard(oldX);
                 cm.SetYBoard(oldY);
                 SetPosition(piece);
-                if (captured != null) captured.SetActive(true);
-                SetPosition(captured);
+                if (captured != null)
+                {
+                    captured.SetActive(true);
+                    SetPosition(captured); // Re-add the captured piece to its position
+                }
 
                 if (!stillInCheck)
                     return false; // Ada langkah legal untuk keluar dari skak
@@ -103,8 +132,11 @@ public class Game : MonoBehaviour
         {
             if (piece == null) continue;
             Chessman cm = piece.GetComponent<Chessman>();
-            List<Vector2Int> enemyMoves = cm.GetLegalMoves();
+            List<Vector2Int> enemyMoves = cm.GetPotentialMoves(); 
 
+            // Note: GetLegalMoves() balik cek nang bidak nok isoh lanjut nok ora stop gerak
+
+            
             foreach (Vector2Int pos in enemyMoves)
             {
                 if (pos.x == x && pos.y == y)
@@ -127,9 +159,10 @@ public class Game : MonoBehaviour
     }
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
+        // Initialize pieces
         playerWhite = new GameObject[]
         {
             Create("white_rook", 0,0), Create("white_knight", 1,0), Create("white_bishop", 2,0),
@@ -156,6 +189,11 @@ public class Game : MonoBehaviour
             SetPosition(playerBlack[i]);
             SetPosition(playerWhite[i]);
         }
+
+        // Initialize and hide game over UI elements
+        if (checkmateText != null) checkmateText.gameObject.SetActive(false);
+        if (restartButton != null) restartButton.gameObject.SetActive(false);
+        if (homeButton != null) homeButton.gameObject.SetActive(false);
 
         turnTimerText.text = Mathf.Ceil(currentTimer).ToString();
     }
@@ -194,6 +232,22 @@ public class Game : MonoBehaviour
         return true;
     }
 
+    //  Button Click Handlers 
+
+    // Called when the Restart button is clicked
+    public void OnRestartButtonClick()
+    {
+        // Reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // Called when the Home button is clicked
+    public void OnHomeButtonClick()
+    {
+        // Load the "Home" scene. Make sure you have a scene named "Home" in your project
+        // and it's added to File > Build Settings.
+        SceneManager.LoadScene("Home"); // You might need to change "Home" to your actual home scene name
+    }
 
 
     // Update is called once per frame
