@@ -48,11 +48,11 @@ public class Chessman : MonoBehaviour
         float x = xBoard;
         float y = yBoard;
 
-        x *= 0.66f;
-        y *= 0.66f;
+        x *= 1.1f;
+        y *= 1.1f;
 
-        x += -2.3f;
-        y += -2.3f;
+        x += -3.8f;
+        y += -3.8f;
 
         this.transform.position = new Vector3(x, y, -1.0f);
     }
@@ -172,11 +172,11 @@ public class Chessman : MonoBehaviour
         float x = matrixX;
         float y = matrixY;
 
-        x *= 0.66f;
-        y *= 0.66f;
+        x *= 1.1f;
+        y *= 1.1f;
 
-        x += -2.3f;
-        y += -2.3f;
+        x += -3.85f;
+        y += -3.85f;
 
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
 

@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.33, y: -2.3, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 0}
+  m_LocalScale: {x: 5, y: 5, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 0}
   movePlate: {fileID: 4540128593775690171, guid: 7f30239f0932fcb4aad270e25b494888, type: 3}
+  player: 
   black_queen: {fileID: -2628853326628446179, guid: 9bd1b60cc3493cc46816313f4648ca7d, type: 3}
   black_knight: {fileID: -334450713805299198, guid: 675e1aeddf01dac4394a6c91f5ef5124, type: 3}
   black_bishop: {fileID: -6414592721767173361, guid: 520b54d4ceeab1b42b76b6b751c538a2, type: 3}

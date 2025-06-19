@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using TMPro; 
-using UnityEngine.UI; 
+using UnityEngine.UI;
+
 using UnityEngine.SceneManagement; 
 
 public class Game : MonoBehaviour
@@ -12,6 +13,8 @@ public class Game : MonoBehaviour
 
     // UI Elements for Game Over
     public TextMeshProUGUI checkmateText; // Reference to the UI TextMeshPro element for "Checkmate!"
+   
+    private string cm = "CHEKMATE!";
     public Button restartButton; // Reference to the UI Button for "Restart"
     public Button homeButton; // Reference to the UI Button for "Home"
 
@@ -24,6 +27,7 @@ public class Game : MonoBehaviour
     // Positions and team for each chesspieces
     private GameObject[,] positions = new GameObject[8, 8];
     private GameObject[] playerBlack = new GameObject[16];
+    //private GameObject[] karak = new GameObject[1];
     private GameObject[] playerWhite = new GameObject[16];
 
     private string currentPlayer = "white";
@@ -47,7 +51,7 @@ public class Game : MonoBehaviour
             Debug.Log("CHECKMATE! Winner: " + (currentPlayer == "white" ? "black" : "white"));
             gameOver = true;
             timerRunning = false; // Stop the timer
-            ShowGameOverUI(); /
+            ShowGameOverUI(); 
         }
     }
 
