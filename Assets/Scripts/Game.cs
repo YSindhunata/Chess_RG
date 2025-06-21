@@ -552,8 +552,8 @@ public class Game : MonoBehaviour
         Vector2 localPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, mainCamera, out localPos);
 
-        float buttonYSpacing = 25f;
-        float buttonXSpacing = 60f;
+        float buttonYSpacing = 100f;
+        float buttonXSpacing = -580f;
 
         // Tombol Horizontal
         if (horizontalButtonPrefab != null)
@@ -568,7 +568,7 @@ public class Game : MonoBehaviour
         if (verticalButtonPrefab != null)
         {
             currentOrientationButtonV = Instantiate(verticalButtonPrefab, canvas.transform);
-            currentOrientationButtonV.GetComponent<RectTransform>().localPosition = localPos + new Vector2(buttonXSpacing, -buttonYSpacing);
+            currentOrientationButtonV.GetComponent<RectTransform>().localPosition = localPos + new Vector2(-buttonXSpacing - 200, buttonYSpacing);
             currentOrientationButtonV.GetComponent<Button>().onClick.AddListener(() => PlaceFireWallSkill(centerPos, false));
             currentOrientationButtonV.gameObject.SetActive(true);
         }
