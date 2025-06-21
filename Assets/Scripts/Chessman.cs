@@ -22,7 +22,6 @@ public class Chessman : MonoBehaviour
     public void Activate()
     {
         Controller = GameObject.FindGameObjectWithTag("GameController");
-        //take the instantiated location and adjust the transform
         SetCoords();
 
         switch (this.name)
@@ -54,7 +53,7 @@ public class Chessman : MonoBehaviour
         x += -3.8f;
         y += -3.8f;
 
-        this.transform.position = new Vector3(x, y, -1.0f);
+        this.transform.position = new Vector3(x, y, -1.0f); // Posisi Z bidak
     }
 
     public int GetXBoard()
@@ -77,14 +76,18 @@ public class Chessman : MonoBehaviour
         yBoard = y;
     }
 
-    //Destroy previous moveplate when switching chesspiece
     private void OnMouseUp()
     {
         Game gameController = Controller.GetComponent<Game>();
 
-        // Cek apakah giliran pemain yang sesuai
         if (player == gameController.GetCurrentPlayer())
         {
+            if (gameController.inSkillPlacementMode)
+            {
+                Debug.Log("Game dalam mode penempatan skill. Tidak bisa memilih bidak catur.");
+                return;
+            }
+
             DestroyMovePlates();
             InitiateMovePlates();
         }
@@ -99,15 +102,12 @@ public class Chessman : MonoBehaviour
         }
     }
 
-    // Making movement on chesspiece
     public void InitiateMovePlates()
     {
-        // Get only truly legal moves (those that don't leave the king in check)
         List<Vector2Int> legalMoves = GetLegalMoves();
 
         foreach (Vector2Int move in legalMoves)
         {
-            // Check if the target position contains an enemy piece
             Game sc = Controller.GetComponent<Game>();
             GameObject targetPiece = sc.GetPosition(move.x, move.y);
 
@@ -132,6 +132,17 @@ public class Chessman : MonoBehaviour
 
         while (sc.PositionOnBoard(x, y))
         {
+            // Firewall dari pemain sendiri (friendly) dapat dilewati, musuh tidak.
+            if (sc.IsCustomObstacle(x, y))
+            {
+                string obstaclePlayerColor = sc.GetObstacleOwnerColor(x, y);
+                if (obstaclePlayerColor != player) // Jika firewall adalah milik musuh
+                {
+                    break; // Bidak lurus tidak bisa melewati firewall musuh
+                }
+                // Jika firewall milik sendiri, bidak bisa terus bergerak melewatinya.
+            }
+
             GameObject cp = sc.GetPosition(x, y);
             if (cp == null)
             {
@@ -139,18 +150,31 @@ public class Chessman : MonoBehaviour
             }
             else
             {
-                // Add the enemy piece's position as a potential capture, then stop
-                if (cp.GetComponent<Chessman>().player != player)
-                    result.Add(new Vector2Int(x, y));
-                break; 
+                if (cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh
+                {
+                    // Cek apakah ada firewall di petak yang sama DAN itu firewall musuh
+                    if (sc.IsCustomObstacle(x, y) && sc.GetObstacleOwnerColor(x, y) != player)
+                    {
+                        // Tidak bisa menyerang bidak di atas firewall musuh
+                        break; // Hentikan gerakan
+                    }
+                    else
+                    {
+                        result.Add(new Vector2Int(x, y)); // Bisa serang
+                    }
+                }
+                break;
             }
+
             x += xDir;
             y += yDir;
         }
+
         return result;
     }
 
-    // Helper method to add a single potential move (for Knight, King)
+
+    // Helper method to add a single potential move (for King and Pawn diagonal captures)
     private void TryAddRawMove(int dx, int dy, List<Vector2Int> rawMovesList)
     {
         Game sc = Controller.GetComponent<Game>();
@@ -159,11 +183,44 @@ public class Chessman : MonoBehaviour
 
         if (sc.PositionOnBoard(x, y))
         {
+            bool isTargetObstacle = sc.IsCustomObstacle(x, y);
+            string obstacleOwnerColor = isTargetObstacle ? sc.GetObstacleOwnerColor(x, y) : null;
+
+            if (isTargetObstacle && obstacleOwnerColor != player) // Jika target adalah Firewall musuh
+            {
+                if (this.name == player + "_knight")
+                {
+                    return; // Kuda bisa melompati firewall musuh, tapi TIDAK BISA menempati petak firewall musuh.
+                }
+                else
+                {
+                    return; // Bidak lain (Raja, Pion) TIDAK BISA bergerak ke/menempati firewall musuh sama sekali.
+                }
+            }
+
             GameObject cp = sc.GetPosition(x, y);
-            if (cp == null || cp.GetComponent<Chessman>().player != player)
+            // --- PERBAIKAN: Perkuat logika untuk menyerang bidak di atas firewall musuh ---
+            if (cp != null && cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh
+            {
+                // Cek apakah ada firewall di petak yang sama DAN itu firewall musuh
+                if (isTargetObstacle && obstacleOwnerColor != player)
+                {
+                    return; // Tidak bisa menyerang bidak di atas firewall musuh
+                }
+                else
+                {
+                    rawMovesList.Add(new Vector2Int(x, y)); // Bisa serang
+                }
+            }
+            else if (cp == null && !isTargetObstacle) // Jika petak kosong dan bukan firewall
             {
                 rawMovesList.Add(new Vector2Int(x, y));
             }
+            else if (cp == null && isTargetObstacle && obstacleOwnerColor == player) // Jika petak kosong dan ada firewall sendiri
+            {
+                rawMovesList.Add(new Vector2Int(x, y)); // Bisa menempati firewall sendiri
+            }
+            // --- AKHIR PERBAIKAN ---
         }
     }
 
@@ -204,29 +261,26 @@ public class Chessman : MonoBehaviour
         mpScript.SetCoords(matrixX, matrixY);
     }
 
-    // Helper cek king urip
     private bool IsKingInCheckAfterMove(int oldX, int oldY, int newX, int newY)
     {
         Game gameController = Controller.GetComponent<Game>();
 
-        // Store state
         GameObject originalPieceAtNewPos = gameController.GetPosition(newX, newY);
         bool originalPieceActive = false;
         if (originalPieceAtNewPos != null)
         {
             originalPieceActive = originalPieceAtNewPos.activeSelf;
-            originalPieceAtNewPos.SetActive(false); 
+            originalPieceAtNewPos.SetActive(false);
         }
 
-        // Simulate move
         gameController.SetPositionEmpty(oldX, oldY);
         int originalXBoard = xBoard;
         int originalYBoard = yBoard;
         xBoard = newX;
         yBoard = newY;
-        gameController.SetPosition(this.gameObject); 
+        gameController.SetPosition(this.gameObject);
 
-        
+
         GameObject king = gameController.FindKing(player);
         bool kingInCheck = false;
 
@@ -237,18 +291,14 @@ public class Chessman : MonoBehaviour
         }
         else
         {
-            // If the king is null, it means the king itself was captured by this move, which is an illegal state.
-            // So, this move is illegal as it leads to the king's capture.
             kingInCheck = true;
         }
 
-        // Undo move
         gameController.SetPositionEmpty(newX, newY);
         xBoard = originalXBoard;
         yBoard = originalYBoard;
-        gameController.SetPosition(this.gameObject); // Place this piece back at old position
+        gameController.SetPosition(this.gameObject);
 
-        // Restore
         if (originalPieceAtNewPos != null)
         {
             originalPieceAtNewPos.SetActive(originalPieceActive);
@@ -258,8 +308,7 @@ public class Chessman : MonoBehaviour
         return kingInCheck;
     }
 
-    // ngitung move nggo illegal move
-    public List<Vector2Int> GetPotentialMoves() // tak ganti publik
+    public List<Vector2Int> GetPotentialMoves()
     {
         List<Vector2Int> rawMoves = new List<Vector2Int>();
         Game sc = Controller.GetComponent<Game>();
@@ -285,7 +334,7 @@ public class Chessman : MonoBehaviour
                 {
                     int dx = knightMoves[i, 0];
                     int dy = knightMoves[i, 1];
-                    TryAddRawMove(dx, dy, rawMoves);
+                    TryAddRawMove(dx, dy, rawMoves); // Kuda menggunakan TryAddRawMove
                 }
                 break;
 
@@ -302,7 +351,7 @@ public class Chessman : MonoBehaviour
                 for (int dx = -1; dx <= 1; dx++)
                     for (int dy = -1; dy <= 1; dy++)
                         if (dx != 0 || dy != 0)
-                            TryAddRawMove(dx, dy, rawMoves);
+                            TryAddRawMove(dx, dy, rawMoves); // Raja menggunakan TryAddRawMove
                 break;
 
             case "black_rook":
@@ -318,29 +367,63 @@ public class Chessman : MonoBehaviour
                 int dir = (player == "white") ? 1 : -1;
                 int startRow = (player == "white") ? 1 : 6;
 
-                // Forward 1
-                if (sc.PositionOnBoard(xBoard, yBoard + dir) && sc.GetPosition(xBoard, yBoard + dir) == null)
+                // Gerakan maju 1 petak
+                int forwardOneX = xBoard;
+                int forwardOneY = yBoard + dir;
+                if (sc.PositionOnBoard(forwardOneX, forwardOneY) && sc.GetPosition(forwardOneX, forwardOneY) == null)
                 {
-                    rawMoves.Add(new Vector2Int(xBoard, yBoard + dir));
-                    // Forward 2
-                    if (yBoard == startRow && sc.PositionOnBoard(xBoard, yBoard + dir * 2) && sc.GetPosition(xBoard, yBoard + dir * 2) == null)
+                    if (sc.IsCustomObstacle(forwardOneX, forwardOneY))
                     {
-                        rawMoves.Add(new Vector2Int(xBoard, yBoard + dir * 2));
+                        string obstacleOwner = sc.GetObstacleOwnerColor(forwardOneX, forwardOneY);
+                        if (obstacleOwner == player)
+                        {
+                            rawMoves.Add(new Vector2Int(forwardOneX, forwardOneY));
+                        }
+                    }
+                    else
+                    {
+                        rawMoves.Add(new Vector2Int(forwardOneX, forwardOneY));
+                    }
+
+                    // Gerakan maju 2 petak (hanya dari baris awal)
+                    int forwardTwoY = yBoard + dir * 2;
+                    if (yBoard == startRow && sc.PositionOnBoard(forwardOneX, forwardTwoY) && sc.GetPosition(forwardOneX, forwardTwoY) == null)
+                    {
+                        // Pion tidak bisa melompati obstacle (meskipun milik sendiri)
+                        // Periksa petak pertama dan petak kedua.
+                        bool obstacleInFirstStep = sc.IsCustomObstacle(forwardOneX, forwardOneY) && sc.GetObstacleOwnerColor(forwardOneX, forwardOneY) != player;
+                        bool obstacleInSecondStep = sc.IsCustomObstacle(forwardOneX, forwardTwoY) && sc.GetObstacleOwnerColor(forwardOneX, forwardTwoY) != player;
+
+                        if (!obstacleInFirstStep && !obstacleInSecondStep)
+                        {
+                            rawMoves.Add(new Vector2Int(forwardOneX, forwardTwoY));
+                        }
                     }
                 }
 
-                // Diagonal captures
-                if (sc.PositionOnBoard(xBoard + 1, yBoard + dir))
+                // Serangan diagonal (Pion hanya bisa menyerang bidak musuh)
+                // Ini sekarang akan memeriksa apakah bidak musuh berada di atas firewall musuh.
+                int[] attackDx = { 1, -1 };
+                foreach (int dx in attackDx)
                 {
-                    var cp = sc.GetPosition(xBoard + 1, yBoard + dir);
-                    if (cp != null && cp.GetComponent<Chessman>().player != player)
-                        rawMoves.Add(new Vector2Int(xBoard + 1, yBoard + dir));
-                }
-                if (sc.PositionOnBoard(xBoard - 1, yBoard + dir))
-                {
-                    var cp = sc.GetPosition(xBoard - 1, yBoard + dir);
-                    if (cp != null && cp.GetComponent<Chessman>().player != player)
-                        rawMoves.Add(new Vector2Int(xBoard - 1, yBoard + dir));
+                    int targetX = xBoard + dx;
+                    int targetY = yBoard + dir;
+
+                    if (sc.PositionOnBoard(targetX, targetY))
+                    {
+                        GameObject cp = sc.GetPosition(targetX, targetY);
+                        if (cp != null && cp.GetComponent<Chessman>().player != player)
+                        {
+                            // --- PERBAIKAN: Pion tidak bisa menyerang bidak di atas firewall musuh ---
+                            if (sc.IsCustomObstacle(targetX, targetY) && sc.GetObstacleOwnerColor(targetX, targetY) != player)
+                            {
+                                // Jika ada firewall musuh di bawah bidak yang diserang, tidak bisa serang
+                                continue; // Skip serangan ini
+                            }
+                            // --- AKHIR PERBAIKAN ---
+                            rawMoves.Add(new Vector2Int(targetX, targetY));
+                        }
+                    }
                 }
                 break;
         }
@@ -348,10 +431,9 @@ public class Chessman : MonoBehaviour
     }
 
 
-    // This method returns only truly legal moves (those that do not leave the king in check).
     public List<Vector2Int> GetLegalMoves()
     {
-        List<Vector2Int> potentialMoves = GetPotentialMoves(); // Get all potential moves
+        List<Vector2Int> potentialMoves = GetPotentialMoves();
         List<Vector2Int> legalMoves = new List<Vector2Int>();
         foreach (Vector2Int move in potentialMoves)
         {
