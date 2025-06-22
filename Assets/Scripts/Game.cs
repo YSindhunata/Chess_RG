@@ -13,7 +13,7 @@ public class Game : MonoBehaviour
     public GameObject ChessPiece;
 
     // UI Elements for Game Over
-    public TextMeshProUGUI checkmateText;
+    public TextMeshProUGUI checkmateText; // Reference to the UI TextMeshPro element for "Checkmate!"
 
     private string cm = "CHEKMATE!";
     public Button restartButton;
@@ -415,13 +415,14 @@ public class Game : MonoBehaviour
             GameObject prefab = Resources.Load<GameObject>("CommanderFire");
             if (prefab != null)
             {
-                GameObject commanderP1 = Instantiate(prefab, new Vector3(-6.5f, 2f, -1f), Quaternion.identity);
+                GameObject commanderP1 = Instantiate(prefab, new Vector3(-3.5f, -6.25f, -1f), Quaternion.identity);
                 commanderP1.name = "CommanderVisual_P1";
 
                 SpriteRenderer sr = commanderP1.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
                     sr.sprite = Resources.Load<Sprite>(p1Type + "_commander");
+                    commanderP1.transform.localScale = new Vector3(0.35f, 0.35f, -1f);
                 }
 
                 CommanderSkill skill = commanderP1.AddComponent<CommanderSkill>();
@@ -443,13 +444,14 @@ public class Game : MonoBehaviour
             GameObject prefab2 = Resources.Load<GameObject>("CommanderFire");
             if (prefab2 != null)
             {
-                GameObject commanderP2 = Instantiate(prefab2, new Vector3(9f, 5f, -1f), Quaternion.identity);
+                GameObject commanderP2 = Instantiate(prefab2, new Vector3(3.5f, 6f, -1f), Quaternion.identity);
                 commanderP2.name = "CommanderVisual_P2";
 
                 SpriteRenderer sr = commanderP2.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
                     sr.sprite = Resources.Load<Sprite>(p2Type + "_commander");
+                    commanderP2.transform.localScale = new Vector3(1.25f, 1f, -1f);
                 }
 
                 CommanderSkill skill = commanderP2.AddComponent<CommanderSkill>();

@@ -6,7 +6,7 @@ MonoImporter:
   defaultReferences:
   - ChessPiece: {instanceID: 0}
   - checkmateText: {fileID: 3217823126972761530, guid: 1b7344d69434d7740a9168d59fa05e9f, type: 3}
-  - restartButton: {fileID: 8257514947133772923, guid: 2d6129853a1a09c4b9acfab9d89c34e2, type: 3}
+  - restartButton: {instanceID: 0}
   - homeButton: {instanceID: 0}
   - turnTimerText: {instanceID: 0}
   executionOrder: 0

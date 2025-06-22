@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 424c40d85cb235e499730e4fbaf2ff46
+guid: 7004d2eb451ae004f81cfa823918d2de
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3112928427010784102
-    second: parallax-demon-woods-bg_0
+      213: 6876568897570084340
+    second: 2d splash art_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: parallax-demon-woods-bg_0
+      name: 2d splash art_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 480
-        height: 272
+        width: 832
+        height: 1216
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a948ec0b618acc4d0800000000000000
-      internalID: -3112928427010784102
+      spriteID: 4f51a2d8afa7e6f50800000000000000
+      internalID: 6876568897570084340
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      parallax-demon-woods-bg_0: -3112928427010784102
+      2d splash art_0: 6876568897570084340
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

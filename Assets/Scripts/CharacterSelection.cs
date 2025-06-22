@@ -22,10 +22,10 @@ public class CharacterSelection : MonoBehaviour
                 SceneManager.LoadScene("ChessGame", LoadSceneMode.Single);
             }
             // --- Pastikan ini menangani "fire" DAN "ice" ---
-            else if (commander == "fire" || commander == "ice") // Menangani pilihan fire atau ice untuk P1
+            else if (commander == "fire" || commander == "ice" || commander == "earth") // Menangani pilihan fire atau ice untuk P1
             {
                 currentPlayer = 2;
-                infoText.text = "Player 2, choose your commander (not " + commander + ")";
+                infoText.text = "Player 2: Choose Your Arcane Master (not " + commander + ")";
             }
             else // Jika ada tipe commander lain yang tidak dikenali
             {
@@ -38,7 +38,7 @@ public class CharacterSelection : MonoBehaviour
         {
             if (commander == p1Commander)
             {
-                infoText.text = "Commander already taken by Player 1. Choose another.";
+                infoText.text = "Arcane Master already taken by Player 1. Choose another.";
                 return;
             }
 
