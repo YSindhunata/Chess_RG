@@ -139,15 +139,20 @@ public class Chessman : MonoBehaviour
 
         while (sc.PositionOnBoard(x, y))
         {
-            // Firewall dari pemain sendiri (friendly) dapat dilewati, musuh tidak.
+            // Periksa jika ada Firewall atau EarthStun obstacle yang menghalangi
             if (sc.IsCustomObstacle(x, y))
             {
+                // Jika itu Firewall, periksa pemiliknya
                 string obstaclePlayerColor = sc.GetObstacleOwnerColor(x, y);
-                if (obstaclePlayerColor != player) // Jika firewall adalah milik musuh
+                if (obstaclePlayerColor != null && obstaclePlayerColor != player) // Ini adalah Firewall musuh
                 {
                     break; // Bidak lurus tidak bisa melewati firewall musuh
                 }
-                // Jika firewall milik sendiri, bidak bisa terus bergerak melewatinya.
+                else if (obstaclePlayerColor == null && sc.IsTemporarilyImpassable(x, y)) // Ini EarthStun obstacle
+                {
+                    break; // EarthStun obstacle menghalangi semua bidak lurus
+                }
+                // Jika firewall milik sendiri, bidak bisa terus bergerak melewatinya (tidak ada break)
             }
 
             GameObject cp = sc.GetPosition(x, y);
@@ -157,20 +162,24 @@ public class Chessman : MonoBehaviour
             }
             else
             {
+                // Cek apakah target serangan berada di atas firewall musuh atau EarthStun obstacle
                 if (cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh
                 {
-                    // Cek apakah ada firewall di petak yang sama DAN itu firewall musuh
-                    if (sc.IsCustomObstacle(x, y) && sc.GetObstacleOwnerColor(x, y) != player)
+                    if (sc.IsCustomObstacle(x, y))
                     {
-                        // Tidak bisa menyerang bidak di atas firewall musuh
-                        break; // Hentikan gerakan
+                        string obstacleOwner = sc.GetObstacleOwnerColor(x, y);
+                        if (obstacleOwner != null && obstacleOwner != player) // Firewall musuh
+                        {
+                            break; // Tidak bisa menyerang bidak di atas firewall musuh
+                        }
+                        else if (obstacleOwner == null && sc.IsTemporarilyImpassable(x, y)) // EarthStun obstacle
+                        {
+                            break; // Tidak bisa menyerang bidak di atas EarthStun obstacle
+                        }
                     }
-                    else
-                    {
-                        result.Add(new Vector2Int(x, y)); // Bisa serang
-                    }
+                    result.Add(new Vector2Int(x, y)); // Bisa serang jika tidak ada obstacle penghalang
                 }
-                break;
+                break; // Bidak lurus berhenti jika ada bidak lain (sendiri atau musuh)
             }
 
             x += xDir;
@@ -181,7 +190,7 @@ public class Chessman : MonoBehaviour
     }
 
 
-    // Helper method to add a single potential move (for King and Pawn diagonal captures)
+    // Helper method to add a single potential move (for King, Knight, and Pawn diagonal captures)
     private void TryAddRawMove(int dx, int dy, List<Vector2Int> rawMovesList)
     {
         Game sc = Controller.GetComponent<Game>();
@@ -192,42 +201,58 @@ public class Chessman : MonoBehaviour
         {
             bool isTargetObstacle = sc.IsCustomObstacle(x, y);
             string obstacleOwnerColor = isTargetObstacle ? sc.GetObstacleOwnerColor(x, y) : null;
+            bool isEarthObstacle = sc.IsTemporarilyImpassable(x, y); // Periksa EarthStun obstacle
 
-            if (isTargetObstacle && obstacleOwnerColor != player) // Jika target adalah Firewall musuh
+            if (isTargetObstacle) // Jika posisi target adalah Firewall atau EarthStun obstacle
             {
                 if (this.name == player + "_knight")
                 {
-                    return; // Kuda bisa melompati firewall musuh, tapi TIDAK BISA menempati petak firewall musuh.
+                    // Kuda bisa melompati kedua jenis obstacle, tapi TIDAK BISA menempati keduanya
+                    return;
                 }
-                else
+                else // Bidak lain (Raja, Pion)
                 {
-                    return; // Bidak lain (Raja, Pion) TIDAK BISA bergerak ke/menempati firewall musuh sama sekali.
+                    if (obstacleOwnerColor != null && obstacleOwnerColor != player) // Ini adalah Firewall musuh
+                    {
+                        return; // TIDAK BISA bergerak ke/menempati firewall musuh
+                    }
+                    else if (isEarthObstacle) // Ini EarthStun obstacle (selalu menghalangi)
+                    {
+                        return; // TIDAK BISA bergerak ke/menempati EarthStun obstacle
+                    }
+                    // Jika itu Firewall milik sendiri, bisa menempati (logika berlanjut)
                 }
             }
 
             GameObject cp = sc.GetPosition(x, y);
-            // --- PERBAIKAN: Perkuat logika untuk menyerang bidak di atas firewall musuh ---
+            // Perkuat logika untuk menyerang bidak di atas obstacle musuh
             if (cp != null && cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh
             {
-                // Cek apakah ada firewall di petak yang sama DAN itu firewall musuh
-                if (isTargetObstacle && obstacleOwnerColor != player)
+                if (isTargetObstacle)
                 {
-                    return; // Tidak bisa menyerang bidak di atas firewall musuh
+                    if (obstacleOwnerColor != null && obstacleOwnerColor != player) // Firewall musuh
+                    {
+                        return; // Tidak bisa menyerang bidak di atas firewall musuh
+                    }
+                    else if (isEarthObstacle) // EarthStun obstacle
+                    {
+                        return; // Tidak bisa menyerang bidak di atas EarthStun obstacle
+                    }
                 }
-                else
-                {
-                    rawMovesList.Add(new Vector2Int(x, y)); // Bisa serang
-                }
+                rawMovesList.Add(new Vector2Int(x, y)); // Bisa serang jika tidak ada obstacle penghalang
             }
-            else if (cp == null && !isTargetObstacle) // Jika petak kosong dan bukan firewall
+            else if (cp == null && !isTargetObstacle) // Jika petak kosong dan bukan obstacle (Firewall/EarthStun)
             {
                 rawMovesList.Add(new Vector2Int(x, y));
             }
-            else if (cp == null && isTargetObstacle && obstacleOwnerColor == player) // Jika petak kosong dan ada firewall sendiri
+            else if (cp == null && isTargetObstacle && obstacleOwnerColor == player) // Jika petak kosong dan ada Firewall sendiri
             {
                 rawMovesList.Add(new Vector2Int(x, y)); // Bisa menempati firewall sendiri
             }
-            // --- AKHIR PERBAIKAN ---
+            // else if (cp == null && isTargetObstacle && isEarthObstacle) // Jika petak kosong dan ada EarthStun obstacle
+            // {
+            //     // Tidak ditambahkan karena EarthStun obstacle menghalangi semua bidak
+            // }
         }
     }
 

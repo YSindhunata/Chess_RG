@@ -43,7 +43,7 @@ public class CharacterSelection : MonoBehaviour
             }
 
             // --- Pastikan ini menangani "fire" DAN "ice" untuk P2 ---
-            if (commander == "fire" || commander == "ice")
+            if (commander == "fire" || commander == "ice" || commander == "earth")
             {
                 PlayerPrefs.SetString("P2Commander", commander);
                 SceneManager.LoadScene("ChessGame", LoadSceneMode.Single);

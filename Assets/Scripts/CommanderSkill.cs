@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CommanderSkill : MonoBehaviour
 {
-    public enum SkillType { FireWall, IceFreeze /*, EarthStun */ }
+    public enum SkillType { FireWall, IceFreeze, EarthStun /*, WaterFreeze */ }
     public SkillType skillType;
     public int cooldownTurns = 5;
     private int remainingCooldown = 0;
@@ -49,9 +49,13 @@ public class CommanderSkill : MonoBehaviour
                 game.EnterSkillPlacementMode(SkillType.FireWall);
                 Debug.Log($"Player {game.GetCurrentPlayer()} memasuki mode penempatan skill FireWall.");
                 break;
-            case SkillType.IceFreeze: // --- Tambahan untuk skill Es ---
+            case SkillType.IceFreeze:
                 game.EnterSkillPlacementMode(SkillType.IceFreeze);
                 Debug.Log($"Player {game.GetCurrentPlayer()} memasuki mode penempatan skill IceFreeze.");
+                break;
+            case SkillType.EarthStun:
+                game.EnterSkillPlacementMode(CommanderSkill.SkillType.EarthStun); // Memasuki mode pemilihan petak
+                Debug.Log($"Player {game.GetCurrentPlayer()} memasuki mode penempatan skill EarthStun.");
                 break;
         }
     }
@@ -82,15 +86,11 @@ public class CommanderSkill : MonoBehaviour
                 fy = startPos.y + i;
             }
 
-            // Firewall bisa ditempatkan di petak kosong atau petak dengan bidak pemain (yang akan berada di atas firewall)
-            // Namun, dalam kasus ini, kita hanya menempatkan di petak kosong
             if (game.PositionOnBoard(fx, fy) && game.GetPosition(fx, fy) == null && !game.IsCustomObstacle(fx, fy))
             {
                 GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 wall.transform.localScale = new Vector3(1f, 1f, 0.5f);
-                // --- PENTING: Sesuaikan Z-position agar di bawah bidak (-1.0f) ---
-                wall.transform.position = new Vector3(fx * 1.1f - 3.8f, fy * 1.1f - 3.8f, -5.0f); // Z=-1.5f atau lebih rendah dari -1.0f
-                // --- AKHIR PERUBAHAN ---
+                wall.transform.position = new Vector3(fx * 1.1f - 3.8f, fy * 1.1f - 3.8f, -5.0f);
                 wall.name = "Firewall";
                 wall.GetComponent<Renderer>().material.color = Color.red;
 
@@ -110,11 +110,23 @@ public class CommanderSkill : MonoBehaviour
     public void ActivateFreeze(Vector2Int targetPos, string deployingPlayerColor)
     {
         Debug.Log($"Mencoba membekukan bidak di {targetPos.x},{targetPos.y} oleh {deployingPlayerColor}");
-        remainingCooldown = cooldownTurns; // Set cooldown saat skill digunakan
+        remainingCooldown = cooldownTurns;
 
-        // Panggil metode di Game.cs untuk membekukan bidak
         game.FreezePieceAtPosition(targetPos, deployingPlayerColor);
     }
+
+    // --- Metode Baru: Mengaktifkan EarthStun (AoE Freeze) ---
+    public void ActivateEarthStun(Vector2Int areaOriginPos, string deployingPlayerColor)
+    {
+        Debug.Log($"Mencoba melakukan stun area di sekitar ({areaOriginPos.x},{areaOriginPos.y}) oleh {deployingPlayerColor}");
+        remainingCooldown = cooldownTurns; // Set cooldown saat skill digunakan
+
+        // Panggil metode di Game.cs untuk membekukan area
+        // Durasi khusus untuk EarthStun (lebih singkat)
+        game.FreezeArea(areaOriginPos, deployingPlayerColor, game.earthStunDuration);
+    }
+    // --- Akhir Metode ActivateEarthStun ---
+
 
     public int GetRemainingCooldown()
     {
