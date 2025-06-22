@@ -66,6 +66,7 @@ public class Game : MonoBehaviour
     private Vector3 playerWhiteBoardBottomWorldPos;
     private Vector3 playerBlackBoardBottomWorldPos;
 
+    public BgMusic bgMusic; // drag GameObject dengan script BgMusic ke sini
 
     public string GetCurrentPlayer()
     {
@@ -174,8 +175,16 @@ public class Game : MonoBehaviour
         if (IsCheckmate(currentPlayer))
         {
             Debug.Log("CHECKMATE! Winner: " + (currentPlayer == "white" ? "black" : "white"));
+
             gameOver = true;
             timerRunning = false;
+
+            if (bgMusic != null)
+            {
+                Debug.Log("Memanggil PlayVictorySound()");
+                bgMusic.PlayVictorySound();
+            }
+
             ShowGameOverUI();
         }
         Debug.Log("--- NextTurn() selesai --- CurrentPlayer setelah ganti: " + currentPlayer);
@@ -956,6 +965,11 @@ public class Game : MonoBehaviour
         }
 
         turnTimerText.text = Mathf.Ceil(currentTimer).ToString();
+
+       // if (IsCheckmate(currentPlayer)) // asumsikan ini method boolean
+       // {
+       //     bgMusic.PlayVictorySound();
+       // }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
