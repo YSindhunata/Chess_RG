@@ -82,6 +82,13 @@ public class Chessman : MonoBehaviour
 
         if (player == gameController.GetCurrentPlayer())
         {
+            // --- Tambahan: Cek apakah bidak ini beku ---
+            if (gameController.IsPieceFrozen(this.gameObject))
+            {
+                Debug.Log($"{this.name} dibekukan! Tidak bisa bergerak.");
+                return; // Jangan lakukan apa-apa jika beku
+            }
+            // --- Akhir Tambahan ---
             if (gameController.inSkillPlacementMode)
             {
                 Debug.Log("Game dalam mode penempatan skill. Tidak bisa memilih bidak catur.");
@@ -247,11 +254,11 @@ public class Chessman : MonoBehaviour
         float x = matrixX;
         float y = matrixY;
 
-        x *= 0.66f;
-        y *= 0.66f;
+        x *= 1.1f;
+        y *= 1.1f;
 
-        x += -2.3f;
-        y += -2.3f;
+        x += -3.85f;
+        y += -3.85f;
 
         GameObject mp = Instantiate(movePlate, new Vector3(x, y, -3.0f), Quaternion.identity);
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CommanderSkill : MonoBehaviour
 {
-    public enum SkillType { FireWall /*, WaterFreeze, EarthStun */ }
+    public enum SkillType { FireWall, IceFreeze /*, EarthStun */ }
     public SkillType skillType;
     public int cooldownTurns = 5;
     private int remainingCooldown = 0;
@@ -48,6 +48,10 @@ public class CommanderSkill : MonoBehaviour
             case SkillType.FireWall:
                 game.EnterSkillPlacementMode(SkillType.FireWall);
                 Debug.Log($"Player {game.GetCurrentPlayer()} memasuki mode penempatan skill FireWall.");
+                break;
+            case SkillType.IceFreeze: // --- Tambahan untuk skill Es ---
+                game.EnterSkillPlacementMode(SkillType.IceFreeze);
+                Debug.Log($"Player {game.GetCurrentPlayer()} memasuki mode penempatan skill IceFreeze.");
                 break;
         }
     }
@@ -101,6 +105,15 @@ public class CommanderSkill : MonoBehaviour
                 Debug.LogWarning($"Tidak bisa menempatkan Firewall di ({fx}, {fy}). Sudah ada bidak/rintangan atau di luar papan.");
             }
         }
+    }
+
+    public void ActivateFreeze(Vector2Int targetPos, string deployingPlayerColor)
+    {
+        Debug.Log($"Mencoba membekukan bidak di {targetPos.x},{targetPos.y} oleh {deployingPlayerColor}");
+        remainingCooldown = cooldownTurns; // Set cooldown saat skill digunakan
+
+        // Panggil metode di Game.cs untuk membekukan bidak
+        game.FreezePieceAtPosition(targetPos, deployingPlayerColor);
     }
 
     public int GetRemainingCooldown()

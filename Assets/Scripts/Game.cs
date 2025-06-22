@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine.UI;
 
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class Game : MonoBehaviour
 {
@@ -29,10 +30,11 @@ public class Game : MonoBehaviour
     private GameObject[] playerBlack = new GameObject[16];
     private GameObject[] playerWhite = new GameObject[16];
 
-    // --- Perubahan: allCustomObstacles untuk melacak objek, obstacleOwnerColors untuk melacak pemilik ---
     private Dictionary<Vector2Int, GameObject> allCustomObstacles = new Dictionary<Vector2Int, GameObject>();
-    private Dictionary<Vector2Int, string> obstacleOwnerColors = new Dictionary<Vector2Int, string>(); // Menyimpan warna pemilik obstacle
-    // --- Akhir Perubahan ---
+    private Dictionary<Vector2Int, string> obstacleOwnerColors = new Dictionary<Vector2Int, string>();
+
+    private Dictionary<GameObject, int> frozenPieces = new Dictionary<GameObject, int>();
+    public int freezeDuration = 5;
 
     private string currentPlayer = "white";
     private bool gameOver = false;
@@ -49,15 +51,13 @@ public class Game : MonoBehaviour
     private GameObject currentOrientationButtonH;
     private GameObject currentOrientationButtonV;
 
-    public Camera mainCamera; // Referensi ke Main Camera
+    public Camera mainCamera;
 
-    public TextMeshProUGUI whiteCommanderCooldownText; // UI untuk cooldown pemain putih
-    public TextMeshProUGUI blackCommanderCooldownText; // UI untuk cooldown pemain hitam
+    public TextMeshProUGUI whiteCommanderCooldownText;
+    public TextMeshProUGUI blackCommanderCooldownText;
 
-    // --- Deklarasi Variabel Posisi Dunia sebagai member kelas ---
     private Vector3 playerWhiteBoardBottomWorldPos;
     private Vector3 playerBlackBoardBottomWorldPos;
-    // --- Akhir Deklarasi ---
 
 
     public string GetCurrentPlayer()
@@ -67,36 +67,84 @@ public class Game : MonoBehaviour
 
     public void NextTurn()
     {
+        Debug.Log("--- NextTurn() dipanggil --- CurrentPlayer sebelum ganti: " + currentPlayer); // DEBUG LOG
         if (gameOver) return;
 
         if (inSkillPlacementMode)
         {
+            Debug.Log("Keluar dari skill placement mode karena giliran berganti secara paksa."); // DEBUG LOG
             ExitSkillPlacementMode();
+        }
+
+        List<GameObject> frozenKeys = new List<GameObject>(frozenPieces.Keys);
+        List<GameObject> piecesToUnfreeze = new List<GameObject>();
+
+        foreach (GameObject piece in frozenKeys)
+        {
+            if (piece != null)
+            {
+                frozenPieces[piece]--;
+                if (frozenPieces[piece] <= 0)
+                {
+                    piecesToUnfreeze.Add(piece);
+                }
+            }
+            else
+            {
+                piecesToUnfreeze.Add(piece);
+            }
+        }
+
+        foreach (GameObject piece in piecesToUnfreeze)
+        {
+            UnfreezePiece(piece);
         }
 
         currentPlayer = currentPlayer == "white" ? "black" : "white";
         currentTimer = turnTime;
 
-        // Kurangi cooldown SEMUA commander, lalu cek apakah firewall lama harus dihapus.
-        // Loop ini akan mengurangi cooldown pada komandan yang baru saja menyelesaikan gilirannya.
-        GameObject[] allPieces = (currentPlayer == "white") ? playerBlack : playerWhite; // Komandan dari pemain yang giliran BARU SELESAI
-        foreach (GameObject piece in allPieces)
+        // --- PERBAIKAN DI SINI: Kurangi cooldown untuk SEMUA CommanderSkill ---
+        // 1. Kurangi cooldown untuk skill yang terpasang di Raja (bidak catur)
+        GameObject[] allPiecesInPlay = playerWhite.Concat(playerBlack).ToArray(); // Gabungkan semua bidak aktif
+        foreach (GameObject piece in allPiecesInPlay)
         {
             if (piece == null) continue;
 
             CommanderSkill skill = piece.GetComponent<CommanderSkill>();
             if (skill != null)
             {
-                skill.OnTurnPassed(); // Kurangi cooldown milik pemain yang GILIRANNYA baru selesai
+                skill.OnTurnPassed(); // Kurangi cooldown milik pemain yang giliran BARU SELESAI
                 if (skill.GetRemainingCooldown() == 0)
                 {
-                    // Hapus firewall lama milik pemain ini jika ada dan cooldownnya sudah 0
                     RemoveFirewallForPlayer(skill.GetPlayerColor());
                 }
             }
         }
 
-        UpdateCommanderCooldownUI(); // Update UI cooldown setelah giliran berubah
+        // 2. Kurangi cooldown untuk skill yang terpasang di objek visual komandan
+        GameObject visualCommanderP1 = GameObject.Find("CommanderVisual_P1");
+        if (visualCommanderP1 != null)
+        {
+            CommanderSkill skill = visualCommanderP1.GetComponent<CommanderSkill>();
+            if (skill != null)
+            {
+                skill.OnTurnPassed(); // Cooldown objek visual
+                // Tidak perlu hapus firewall di sini, karena firewall dikelola oleh skill di Raja
+            }
+        }
+
+        GameObject visualCommanderP2 = GameObject.Find("CommanderVisual_P2");
+        if (visualCommanderP2 != null)
+        {
+            CommanderSkill skill = visualCommanderP2.GetComponent<CommanderSkill>();
+            if (skill != null)
+            {
+                skill.OnTurnPassed(); // Cooldown objek visual
+            }
+        }
+        // --- AKHIR PERBAIKAN ---
+
+        UpdateCommanderCooldownUI();
 
 
         if (IsCheckmate(currentPlayer))
@@ -106,39 +154,34 @@ public class Game : MonoBehaviour
             timerRunning = false;
             ShowGameOverUI();
         }
+        Debug.Log("--- NextTurn() selesai --- CurrentPlayer setelah ganti: " + currentPlayer); // DEBUG LOG
     }
 
-    // --- Metode untuk menghapus semua firewall untuk pemain tertentu ---
     public void RemoveFirewallForPlayer(string playerColor)
     {
-        // Temukan semua posisi firewall yang dimiliki pemain ini
         List<Vector2Int> positionsToRemove = new List<Vector2Int>();
-        // Iterate over obstacleOwnerColors to find obstacles owned by playerColor
-        foreach (var entry in obstacleOwnerColors) // Menggunakan obstacleOwnerColors untuk mencari
+        foreach (var entry in obstacleOwnerColors)
         {
-            if (entry.Value == playerColor) // Jika pemiliknya adalah playerColor
+            if (entry.Value == playerColor)
             {
-                positionsToRemove.Add(entry.Key); // Tambahkan posisinya untuk dihapus
+                positionsToRemove.Add(entry.Key);
             }
         }
 
         foreach (Vector2Int pos in positionsToRemove)
         {
-            if (allCustomObstacles.ContainsKey(pos)) // Pastikan objek masih ada
+            if (allCustomObstacles.ContainsKey(pos))
             {
-                Destroy(allCustomObstacles[pos]); // Hancurkan GameObject
-                allCustomObstacles.Remove(pos); // Hapus dari dictionary utama
+                Destroy(allCustomObstacles[pos]);
+                allCustomObstacles.Remove(pos);
             }
-            obstacleOwnerColors.Remove(pos); // Hapus dari daftar pemilik
+            obstacleOwnerColors.Remove(pos);
         }
         Debug.Log($"Firewall lama pemain {playerColor} telah dihapus.");
     }
-    // --- Akhir Metode RemoveFirewallForPlayer ---
 
-    // --- Metode untuk memperbarui tampilan cooldown di UI ---
     private void UpdateCommanderCooldownUI()
     {
-        // Temukan komandan putih (Raja)
         GameObject whiteKing = FindKing("white");
         if (whiteKing != null)
         {
@@ -149,7 +192,6 @@ public class Game : MonoBehaviour
             }
         }
 
-        // Temukan komandan hitam (Raja)
         GameObject blackKing = FindKing("black");
         if (blackKing != null)
         {
@@ -160,7 +202,6 @@ public class Game : MonoBehaviour
             }
         }
     }
-    // --- Akhir Metode UpdateCommanderCooldownUI ---
 
 
     private void ShowGameOverUI()
@@ -184,10 +225,8 @@ public class Game : MonoBehaviour
     {
         GameObject king = FindKing(player);
         if (king == null) return false;
-
         if (!IsUnderAttack(king.GetComponent<Chessman>().GetXBoard(), king.GetComponent<Chessman>().GetYBoard(), player))
             return false;
-
         GameObject[] pieces = player == "white" ? playerWhite : playerBlack;
         foreach (GameObject piece in pieces)
         {
@@ -210,7 +249,11 @@ public class Game : MonoBehaviour
 
                 bool stillInCheck = IsUnderAttack(FindKing(player).GetComponent<Chessman>().GetXBoard(), FindKing(player).GetComponent<Chessman>().GetYBoard(), player);
 
+                // --- PERBAIKAN DI SINI ---
+                // 'newY' tidak ada dalam scope ini. Gunakan 'move.y'
                 SetPositionEmpty(move.x, move.y);
+                // --- AKHIR PERBAIKAN ---
+
                 cm.SetXBoard(oldX);
                 cm.SetYBoard(oldY);
                 SetPosition(piece);
@@ -224,27 +267,23 @@ public class Game : MonoBehaviour
                     return false;
             }
         }
-
         return true;
     }
 
     public bool IsUnderAttack(int x, int y, string player)
     {
         GameObject[] enemyPieces = player == "white" ? playerBlack : playerWhite;
-
         foreach (GameObject piece in enemyPieces)
         {
             if (piece == null) continue;
             Chessman cm = piece.GetComponent<Chessman>();
             List<Vector2Int> enemyMoves = cm.GetPotentialMoves();
-
             foreach (Vector2Int pos in enemyMoves)
             {
                 if (pos.x == x && pos.y == y)
                     return true;
             }
         }
-
         return false;
     }
 
@@ -316,17 +355,27 @@ public class Game : MonoBehaviour
         if (p1Type != "plain")
         {
             GameObject prefab = Resources.Load<GameObject>("CommanderFire");
-            GameObject commanderP1 = Instantiate(prefab, new Vector3(-6.5f, 2f, -1f), Quaternion.identity);
-            commanderP1.name = "CommanderVisual_P1";
+            if (prefab != null)
+            {
+                GameObject commanderP1 = Instantiate(prefab, new Vector3(-6.5f, 2f, -1f), Quaternion.identity);
+                commanderP1.name = "CommanderVisual_P1";
 
-            SpriteRenderer sr = commanderP1.GetComponent<SpriteRenderer>();
-            sr.sprite = Resources.Load<Sprite>(p1Type + "_commander");
+                SpriteRenderer sr = commanderP1.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.sprite = Resources.Load<Sprite>(p1Type + "_commander");
+                }
 
-            CommanderSkill skill = commanderP1.AddComponent<CommanderSkill>();
-            skill.skillType = ParseSkillType(p1Type);
-            skill.cooldownTurns = 5;
+                CommanderSkill skill = commanderP1.AddComponent<CommanderSkill>();
+                skill.skillType = ParseSkillType(p1Type);
+                skill.cooldownTurns = 5;
 
-            commanderP1.AddComponent<CommanderClick>();
+                commanderP1.AddComponent<CommanderClick>();
+            }
+            else
+            {
+                Debug.LogError("Prefab 'CommanderFire' tidak ditemukan di Resources! Pastikan sudah ada.");
+            }
         }
 
         // === BUAT KOMANDER VISUAL PLAYER 2 ===
@@ -334,21 +383,29 @@ public class Game : MonoBehaviour
         if (p2Type != "plain")
         {
             GameObject prefab2 = Resources.Load<GameObject>("CommanderFire");
-            GameObject commanderP2 = Instantiate(prefab2, new Vector3(9f, 5f, -1f), Quaternion.identity);
-            commanderP2.name = "CommanderVisual_P2";
+            if (prefab2 != null)
+            {
+                GameObject commanderP2 = Instantiate(prefab2, new Vector3(9f, 5f, -1f), Quaternion.identity);
+                commanderP2.name = "CommanderVisual_P2";
 
-            SpriteRenderer sr = commanderP2.GetComponent<SpriteRenderer>();
-            sr.sprite = Resources.Load<Sprite>(p2Type + "_commander");
+                SpriteRenderer sr = commanderP2.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.sprite = Resources.Load<Sprite>(p2Type + "_commander");
+                }
 
-            CommanderSkill skill = commanderP2.AddComponent<CommanderSkill>();
-            skill.skillType = ParseSkillType(p2Type);
-            skill.cooldownTurns = 5;
+                CommanderSkill skill = commanderP2.AddComponent<CommanderSkill>();
+                skill.skillType = ParseSkillType(p2Type);
+                skill.cooldownTurns = 5;
 
-            commanderP2.AddComponent<CommanderClick>();
+                commanderP2.AddComponent<CommanderClick>();
+            }
+            else
+            {
+                Debug.LogError("Prefab 'CommanderFire' tidak ditemukan di Resources! Pastikan sudah ada.");
+            }
         }
 
-        // --- Inisialisasi variabel posisi dunia di Start() ---
-        // Karena ini adalah variabel kelas, inisialisasi di Start() sudah cukup.
         float boardMinY = -3.8f;
         float boardMaxY = 3.8f;
         float boardCenterX = -3.8f + (7 * 1.1f) / 2f;
@@ -356,9 +413,8 @@ public class Game : MonoBehaviour
 
         playerWhiteBoardBottomWorldPos = new Vector3(boardCenterX, boardMinY - worldOffsetFromBoard, 0);
         playerBlackBoardBottomWorldPos = new Vector3(boardCenterX, boardMaxY + worldOffsetFromBoard, 0);
-        // --- Akhir inisialisasi ---
 
-        UpdateCommanderCooldownUI(); // Update UI cooldown awal game
+        UpdateCommanderCooldownUI();
     }
 
 
@@ -389,14 +445,13 @@ public class Game : MonoBehaviour
         return positions[x, y];
     }
 
-    // --- Perubahan: SetCustomObstacle untuk melacak objek dan pemiliknya ---
     public void SetCustomObstacle(int x, int y, GameObject obj, string playerColor)
     {
         Vector2Int pos = new Vector2Int(x, y);
         if (!allCustomObstacles.ContainsKey(pos))
         {
             allCustomObstacles[pos] = obj;
-            obstacleOwnerColors[pos] = playerColor; // Simpan warna pemiliknya
+            obstacleOwnerColors[pos] = playerColor;
 
             Debug.Log($"Firewall baru '{obj.name}' ditempatkan oleh {playerColor} di ({x},{y}). Total obstacles: {allCustomObstacles.Count}");
         }
@@ -405,16 +460,13 @@ public class Game : MonoBehaviour
             Debug.LogWarning($"SetCustomObstacle: Posisi ({x},{y}) sudah memiliki obstacle lain.");
         }
     }
-    // --- Akhir Perubahan ---
 
     public bool IsCustomObstacle(int x, int y)
     {
         bool isObstacle = allCustomObstacles.ContainsKey(new Vector2Int(x, y));
-        // Debug.Log($"Memeriksa ({x},{y}) untuk obstacle: {isObstacle}"); // Untuk debugging
         return isObstacle;
     }
 
-    // --- Metode untuk mendapatkan warna pemilik obstacle ---
     public string GetObstacleOwnerColor(int x, int y)
     {
         Vector2Int pos = new Vector2Int(x, y);
@@ -422,9 +474,8 @@ public class Game : MonoBehaviour
         {
             return obstacleOwnerColors[pos];
         }
-        return null; // Mengembalikan null jika tidak ada obstacle di posisi tersebut
+        return null;
     }
-    // --- Akhir Metode GetObstacleOwnerColor ---
 
 
     public bool PositionOnBoard(int x, int y)
@@ -445,6 +496,7 @@ public class Game : MonoBehaviour
 
     public void EnterSkillPlacementMode(CommanderSkill.SkillType skillType)
     {
+        Debug.Log($"Memasuki mode penempatan skill: {skillType}"); // DEBUG LOG
         inSkillPlacementMode = true;
         currentSkillToPlace = skillType;
         activeCommanderUsingSkill = FindKing(currentPlayer);
@@ -461,6 +513,7 @@ public class Game : MonoBehaviour
 
     public void ExitSkillPlacementMode()
     {
+        Debug.Log("Keluar dari mode penempatan skill."); // DEBUG LOG
         inSkillPlacementMode = false;
         currentSkillToPlace = CommanderSkill.SkillType.FireWall;
         activeCommanderUsingSkill = null;
@@ -471,6 +524,7 @@ public class Game : MonoBehaviour
 
     private void ShowSkillPlacementOptions()
     {
+        Debug.Log("Menampilkan opsi penempatan skill untuk: " + currentSkillToPlace); // DEBUG LOG
         ClearSkillPlacementPlates();
         HideOrientationButtons();
 
@@ -478,21 +532,36 @@ public class Game : MonoBehaviour
         {
             for (int y = 0; y < 8; y++)
             {
-                // Hanya tampilkan jika petak kosong dan BUKAN obstacle kustom yang sudah ada
-                if (GetPosition(x, y) == null && !IsCustomObstacle(x, y))
+                if (currentSkillToPlace == CommanderSkill.SkillType.FireWall)
                 {
-                    GameObject mp = Instantiate(skillPlacementPlate, new Vector3(x * 1.1f - 3.85f, y * 1.1f - 3.85f, -3.0f), Quaternion.identity);
-                    MovePlate mpScript = mp.GetComponent<MovePlate>();
-                    mpScript.SetCoords(x, y);
-                    mpScript.isSkillPlacement = true;
-                    mpScript.SetReference(activeCommanderUsingSkill);
-                    currentSkillPlates.Add(new Vector2Int(x, y), mp);
-
-                    mp.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 0.7f);
+                    if (GetPosition(x, y) == null && !IsCustomObstacle(x, y))
+                    {
+                        GameObject mp = Instantiate(skillPlacementPlate, new Vector3(x * 1.1f - 3.85f, y * 1.1f - 3.85f, -3.0f), Quaternion.identity);
+                        MovePlate mpScript = mp.GetComponent<MovePlate>();
+                        mpScript.SetCoords(x, y);
+                        mpScript.isSkillPlacement = true;
+                        mpScript.SetReference(activeCommanderUsingSkill);
+                        currentSkillPlates.Add(new Vector2Int(x, y), mp);
+                        mp.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 0.7f); // Biru transparan
+                    }
+                }
+                else if (currentSkillToPlace == CommanderSkill.SkillType.IceFreeze)
+                {
+                    GameObject targetPiece = GetPosition(x, y);
+                    if (targetPiece != null && targetPiece.GetComponent<Chessman>().player != currentPlayer && !IsPieceFrozen(targetPiece))
+                    {
+                        GameObject mp = Instantiate(skillPlacementPlate, new Vector3(x * 1.1f - 3.85f, y * 1.1f - 3.85f, -3.0f), Quaternion.identity);
+                        MovePlate mpScript = mp.GetComponent<MovePlate>();
+                        mpScript.SetCoords(x, y);
+                        mpScript.isSkillPlacement = true;
+                        mpScript.SetReference(activeCommanderUsingSkill); // Komandan yang menggunakan skill
+                        currentSkillPlates.Add(new Vector2Int(x, y), mp);
+                        mp.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.7f, 1.0f, 0.7f); // Biru muda transparan
+                    }
                 }
             }
         }
-        Debug.Log("Menampilkan opsi penempatan skill. Pilih petak awal.");
+        Debug.Log("Menampilkan opsi penempatan skill. Pilih target.");
     }
 
     private void ClearSkillPlacementPlates()
@@ -506,15 +575,42 @@ public class Game : MonoBehaviour
 
     public void ConfirmSkillPlacement(int x, int y)
     {
+        Debug.Log($"ConfirmSkillPlacement dipanggil untuk ({x},{y}). Mode: {inSkillPlacementMode}, Skill: {currentSkillToPlace}"); // DEBUG LOG
+
         if (!inSkillPlacementMode || activeCommanderUsingSkill == null) return;
 
-        if (firstClickPos.x == -1)
-        {
-            firstClickPos = new Vector2Int(x, y);
-            ClearSkillPlacementPlates();
+        CommanderSkill commanderSkill = activeCommanderUsingSkill.GetComponent<CommanderSkill>();
+        if (commanderSkill == null) return;
 
-            ShowOrientationButtons(firstClickPos);
-            Debug.Log($"Petak awal skill dipilih: ({x},{y}). Pilih orientasi.");
+        if (currentSkillToPlace == CommanderSkill.SkillType.FireWall)
+        {
+            if (firstClickPos.x == -1)
+            {
+                firstClickPos = new Vector2Int(x, y);
+                ClearSkillPlacementPlates();
+                ShowOrientationButtons(firstClickPos);
+                Debug.Log($"Petak awal skill FireWall dipilih: ({x},{y}). Pilih orientasi.");
+            }
+        }
+        else if (currentSkillToPlace == CommanderSkill.SkillType.IceFreeze)
+        {
+            GameObject targetPiece = GetPosition(x, y);
+            if (targetPiece != null && targetPiece.GetComponent<Chessman>().player != currentPlayer && !IsPieceFrozen(targetPiece))
+            {
+                Debug.Log($"Target valid untuk Freeze: {targetPiece.name} di ({x},{y})."); // DEBUG LOG
+                commanderSkill.ActivateFreeze(new Vector2Int(x, y), currentPlayer);
+                ExitSkillPlacementMode();
+                // NextTurn() TIDAK DIPANGGIL DI SINI untuk Freeze yang BERHASIL
+                UpdateCommanderCooldownUI();
+            }
+            else
+            {
+                Debug.LogWarning("Target tidak valid untuk skill Freeze (bukan lawan atau sudah beku). Skill hangus.");
+                ExitSkillPlacementMode();
+                Debug.Log("Memanggil NextTurn() karena target Freeze tidak valid."); // DEBUG LOG
+                NextTurn(); // Giliran berganti jika target tidak valid
+                UpdateCommanderCooldownUI();
+            }
         }
     }
 
@@ -568,7 +664,7 @@ public class Game : MonoBehaviour
         if (verticalButtonPrefab != null)
         {
             currentOrientationButtonV = Instantiate(verticalButtonPrefab, canvas.transform);
-            currentOrientationButtonV.GetComponent<RectTransform>().localPosition = localPos + new Vector2(-buttonXSpacing - 200, buttonYSpacing);
+            currentOrientationButtonV.GetComponent<RectTransform>().localPosition = localPos + new Vector2(-buttonXSpacing + 200, buttonYSpacing);
             currentOrientationButtonV.GetComponent<Button>().onClick.AddListener(() => PlaceFireWallSkill(centerPos, false));
             currentOrientationButtonV.gameObject.SetActive(true);
         }
@@ -592,18 +688,77 @@ public class Game : MonoBehaviour
 
     public void PlaceFireWallSkill(Vector2Int centerPos, bool isHorizontal)
     {
+        Debug.Log("PlaceFireWallSkill dipanggil."); // DEBUG LOG
         if (!inSkillPlacementMode || activeCommanderUsingSkill == null) return;
+        if (currentSkillToPlace != CommanderSkill.SkillType.FireWall) return;
 
         CommanderSkill commanderSkill = activeCommanderUsingSkill.GetComponent<CommanderSkill>();
         if (commanderSkill != null)
         {
-            commanderSkill.PlaceFireWall(centerPos, isHorizontal, currentPlayer); // Teruskan warna pemain
+            commanderSkill.PlaceFireWall(centerPos, isHorizontal, currentPlayer);
         }
 
         ExitSkillPlacementMode();
+        Debug.Log("Memanggil NextTurn() setelah PlaceFireWallSkill."); // DEBUG LOG
         NextTurn();
-        UpdateCommanderCooldownUI(); // Pastikan UI Cooldown diperbarui setelah skill digunakan
+        UpdateCommanderCooldownUI();
     }
+
+
+    public void FreezePieceAtPosition(Vector2Int pos, string freezingPlayerColor)
+    {
+        GameObject pieceToFreeze = GetPosition(pos.x, pos.y);
+        if (pieceToFreeze != null && pieceToFreeze.GetComponent<Chessman>().player != freezingPlayerColor)
+        {
+            if (!frozenPieces.ContainsKey(pieceToFreeze))
+            {
+                frozenPieces[pieceToFreeze] = freezeDuration;
+                SpriteRenderer sr = pieceToFreeze.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = Color.cyan;
+                }
+                Debug.Log($"Bidak {pieceToFreeze.name} dibekukan selama {freezeDuration} giliran!");
+            }
+            else
+            {
+                Debug.LogWarning($"Bidak {pieceToFreeze.name} sudah dibekukan.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"Tidak ada bidak lawan valid di ({pos.x},{pos.y}) untuk dibekukan.");
+        }
+    }
+
+    public bool IsPieceFrozen(GameObject piece)
+    {
+        if (piece == null) return false;
+        return frozenPieces.ContainsKey(piece) && frozenPieces[piece] > 0;
+    }
+
+    private void UnfreezePiece(GameObject piece)
+    {
+        if (frozenPieces.ContainsKey(piece))
+        {
+            frozenPieces.Remove(piece);
+            if (piece != null)
+            {
+                SpriteRenderer sr = piece.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = Color.white; // Kembalikan warna ke putih/default
+                    piece.GetComponent<Chessman>().Activate(); // Memuat ulang sprite asli dan warna default
+                }
+                Debug.Log($"Bidak {piece.name} tidak lagi beku.");
+            }
+            else
+            {
+                Debug.Log($"Bidak yang sudah dibekukan tidak lagi ditemukan (mungkin sudah dimakan/dihancurkan).");
+            }
+        }
+    }
+
 
     void Update()
     {
@@ -621,6 +776,7 @@ public class Game : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("Tombol Space ditekan."); // DEBUG LOG
             if (inSkillPlacementMode)
             {
                 Debug.Log("Anda sudah dalam mode penempatan skill. Pilih lokasi di papan.");
@@ -636,6 +792,7 @@ public class Game : MonoBehaviour
                 CommanderSkill skill = piece.GetComponent<CommanderSkill>();
                 if (skill != null && skill.CanUseSkill())
                 {
+                    Debug.Log($"Mengaktifkan skill {skill.skillType} dari {piece.name}."); // DEBUG LOG
                     skill.UseSkill();
                     Debug.Log($"Player {currentPlayer} menggunakan skill {skill.skillType} dan memasuki mode penempatan.");
                     break;
@@ -653,6 +810,9 @@ public class Game : MonoBehaviour
             case "fire":
                 skill.skillType = CommanderSkill.SkillType.FireWall;
                 break;
+            case "ice":
+                skill.skillType = CommanderSkill.SkillType.IceFreeze;
+                break;
         }
     }
 
@@ -661,6 +821,7 @@ public class Game : MonoBehaviour
         switch (type)
         {
             case "fire": return CommanderSkill.SkillType.FireWall;
+            case "ice": return CommanderSkill.SkillType.IceFreeze;
             default: return CommanderSkill.SkillType.FireWall;
         }
     }

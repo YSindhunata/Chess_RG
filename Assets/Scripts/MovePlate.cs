@@ -32,18 +32,20 @@ public class MovePlate : MonoBehaviour
     public void OnMouseUp()
     {
         Controller = GameObject.FindGameObjectWithTag("GameController");
-        Game gameController = Controller.GetComponent<Game>(); // Dapatkan referensi Game sekali
+        Game gameController = Controller.GetComponent<Game>();
 
-        // --- Perubahan: Prioritaskan logika penempatan skill jika dalam mode ini ---
-        // Ini adalah klik pertama untuk memilih petak tengah firewall
-        if (gameController.inSkillPlacementMode && isSkillPlacement && gameController.firstClickPos.x == -1)
+        // --- PERBAIKAN LOGIKA KLIK SKILL ---
+        // Jika sedang dalam mode penempatan skill dan moveplate ini adalah untuk skill
+        if (gameController.inSkillPlacementMode && isSkillPlacement)
         {
+            // Panggil ConfirmSkillPlacement, yang akan menangani logika spesifik skill
+            // (apakah itu FireWall atau IceFreeze)
             gameController.ConfirmSkillPlacement(matrixX, matrixY);
-            return; // Hentikan eksekusi, ini adalah klik untuk skill, bukan gerakan catur
+            return; // Hentikan eksekusi, ini adalah klik untuk skill
         }
-        // --- Akhir Perubahan ---
+        // --- AKHIR PERBAIKAN LOGIKA KLIK SKILL ---
 
-        // Logika gerakan catur biasa, hanya dieksekusi jika bukan mode penempatan skill
+        // Logika gerakan catur biasa, hanya dieksekusi jika BUKAN mode penempatan skill
         if (attack)
         {
             GameObject cp = gameController.GetPosition(matrixX, matrixY);
@@ -62,7 +64,6 @@ public class MovePlate : MonoBehaviour
 
         // Ganti giliran pemain
         gameController.NextTurn();
-
     }
 
 
