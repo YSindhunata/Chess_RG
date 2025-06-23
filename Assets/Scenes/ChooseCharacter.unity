@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe8eb96e7f8ec54681fb715f6ea5876, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgmusic: {fileID: 8300000, guid: ad9a57aa3be46c940968585eab5c6144, type: 3}
+  bgmusic: {fileID: 8300000, guid: ec1aa09c79589b843b185b75b4c73223, type: 3}
   victoryClip: {fileID: 0}
 --- !u!1 &506565694
 GameObject:
