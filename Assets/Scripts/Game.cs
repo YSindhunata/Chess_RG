@@ -11,6 +11,7 @@ using System.Linq;
 public class Game : MonoBehaviour
 {
     public GameObject ChessPiece;
+    private Dictionary<GameObject, GameObject> frozenEffects = new Dictionary<GameObject, GameObject>();
 
     // UI Elements for Game Over
     public TextMeshProUGUI checkmateText; // Reference to the UI TextMeshPro element for "Checkmate!"
@@ -66,6 +67,9 @@ public class Game : MonoBehaviour
     private Vector3 playerWhiteBoardBottomWorldPos;
     private Vector3 playerBlackBoardBottomWorldPos;
 
+    public GameObject freezeEffectPrefab; //VFX freeze
+    public GameObject unfreezeEffectPrefab; //VFX unfreeze
+    public GameObject firewallSegmentPrefab; //VFX firewall
     public BgMusic bgMusic; // drag GameObject dengan script BgMusic ke sini
 
     public string GetCurrentPlayer()
@@ -779,6 +783,7 @@ public class Game : MonoBehaviour
 
         float buttonYSpacing = 100f;
         float buttonXSpacing = -580f;
+        float verticalButtonOffsetFromHorizontal = -60f;
 
         // Tombol Horizontal
         if (horizontalButtonPrefab != null)
@@ -793,7 +798,7 @@ public class Game : MonoBehaviour
         if (verticalButtonPrefab != null)
         {
             currentOrientationButtonV = Instantiate(verticalButtonPrefab, canvas.transform);
-            currentOrientationButtonV.GetComponent<RectTransform>().localPosition = localPos + new Vector2(-buttonXSpacing + 200, buttonYSpacing);
+            currentOrientationButtonV.GetComponent<RectTransform>().localPosition = localPos + new Vector2(-buttonXSpacing, buttonYSpacing + verticalButtonOffsetFromHorizontal);
             currentOrientationButtonV.GetComponent<Button>().onClick.AddListener(() => PlaceFireWallSkill(centerPos, false));
             currentOrientationButtonV.gameObject.SetActive(true);
         }
@@ -825,6 +830,51 @@ public class Game : MonoBehaviour
         if (commanderSkill != null)
         {
             commanderSkill.PlaceFireWall(centerPos, isHorizontal, currentPlayer);
+            // --- BAGIAN BARU: PENEMPATAN VISUAL FIREWALL ---
+            if (firewallSegmentPrefab != null)
+            {
+                // Tentukan posisi awal untuk segmen pertama firewall
+                // Firewall akan selalu berpusat pada centerPos yang dipilih.
+                // Oleh karena itu, kita perlu menghitung posisi 3 segmen.
+
+                Vector2Int[] firewallPositions = new Vector2Int[3];
+
+                if (isHorizontal)
+                {
+                    // Horizontal: centerPos, centerPos.x-1, centerPos.x+1
+                    firewallPositions[0] = new Vector2Int(centerPos.x - 1, centerPos.y);
+                    firewallPositions[1] = centerPos;
+                    firewallPositions[2] = new Vector2Int(centerPos.x + 1, centerPos.y);
+                }
+                else // Vertical
+                {
+                    // Vertical: centerPos, centerPos.y-1, centerPos.y+1
+                    firewallPositions[0] = new Vector2Int(centerPos.x, centerPos.y - 1);
+                    firewallPositions[1] = centerPos;
+                    firewallPositions[2] = new Vector2Int(centerPos.x, centerPos.y + 1);
+                }
+
+                // Instansiasi dan simpan referensi visual firewall
+                foreach (Vector2Int pos in firewallPositions)
+                {
+                    if (PositionOnBoard(pos.x, pos.y)) // Pastikan posisi di dalam papan
+                    {
+                        // Konversi posisi papan ke posisi dunia
+                        Vector3 worldPos = new Vector3(pos.x * 1.1f - 3.8f, pos.y * 1.1f - 3.8f, -2.0f); // Z sedikit di atas move plate, di bawah bidak
+                        GameObject fireVisual = Instantiate(firewallSegmentPrefab, worldPos, Quaternion.identity);
+                        fireVisual.name = $"Firewall_Visual_{pos.x}_{pos.y}";
+                        // Penting: Simpan referensi ke objek visual ini di allCustomObstacles
+                        // agar bisa dihancurkan saat giliran Commander berakhir.
+                        // Pastikan `SetCustomObstacle` juga menyimpan objek visual ini.
+                        SetCustomObstacle(pos.x, pos.y, fireVisual, currentPlayer); // Ini akan menyimpan objek visual ke allCustomObstacles
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("firewallSegmentPrefab tidak diatur di Inspector!");
+            }
+            // --- AKHIR BAGIAN BARU ---
         }
 
         ExitSkillPlacementMode();
@@ -843,11 +893,23 @@ public class Game : MonoBehaviour
             {
                 frozenPieces[pieceToFreeze] = freezeDuration;
                 SpriteRenderer sr = pieceToFreeze.GetComponent<SpriteRenderer>();
-                if (sr != null)
-                {
-                    sr.color = Color.cyan;
-                }
+                //if (sr != null)
+                //{
+                    //sr.color = Color.cyan;
+                //}
                 Debug.Log($"Bidak {pieceToFreeze.name} dibekukan selama {freezeDuration} giliran!");
+                if (freezeEffectPrefab != null)
+                {
+                    // Sesuaikan posisi Z agar efek muncul di atas bidak
+                    Vector3 effectPos = pieceToFreeze.transform.position;
+                    effectPos.z -= 0.9f; // Sedikit di depan bidak
+
+                    GameObject freezeEffect = Instantiate(freezeEffectPrefab, effectPos, Quaternion.identity);
+                    // Atur parent agar efek mengikuti bidak jika bidak bergerak
+                    freezeEffect.transform.SetParent(pieceToFreeze.transform);
+                    frozenEffects[pieceToFreeze] = freezeEffect; 
+                }
+               
             }
             else
             {
@@ -891,6 +953,7 @@ public class Game : MonoBehaviour
                     }
                     else if (pieceToFreeze == null)
                     {
+                        // IKI EARTH SUUUUU (EFEK KOTAK GATHEL)
                         // Jika petak kosong, jadikan obstacle tidak dapat ditempati
                         // Periksa apakah sudah ada obstacle lain di sana (misalnya Firewall)
                         if (!allCustomObstacles.ContainsKey(new Vector2Int(targetX, targetY)) && !activeEarthObstacles.ContainsKey(new Vector2Int(targetX, targetY)))
@@ -933,7 +996,17 @@ public class Game : MonoBehaviour
     {
         if (frozenPieces.ContainsKey(piece))
         {
-            frozenPieces.Remove(piece);
+            if (frozenPieces.ContainsKey(piece))
+            {
+
+                if (frozenEffects.ContainsKey(piece) && frozenEffects[piece] != null)
+                    {
+                    Destroy(frozenEffects[piece]);
+                     frozenEffects.Remove(piece);
+                    }
+                
+            }
+                frozenPieces.Remove(piece);
             if (piece != null)
             {
                 SpriteRenderer sr = piece.GetComponent<SpriteRenderer>();
@@ -943,6 +1016,15 @@ public class Game : MonoBehaviour
                     piece.GetComponent<Chessman>().Activate(); // Memuat ulang sprite asli dan warna default
                 }
                 Debug.Log($"Bidak {piece.name} tidak lagi beku.");
+                if (unfreezeEffectPrefab != null)
+                {
+                    // Pastikan efek muncul di posisi bidak yang tidak beku
+                    Vector3 effectPos = piece.transform.position;
+                    // Sesuaikan Z jika perlu agar efek terlihat di atas bidak
+                    effectPos.z -= 0.9f;
+                    Instantiate(unfreezeEffectPrefab, effectPos, Quaternion.identity);
+                }
+                
             }
             else
             {

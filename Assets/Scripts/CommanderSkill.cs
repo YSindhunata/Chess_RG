@@ -86,7 +86,7 @@ public class CommanderSkill : MonoBehaviour
                 fy = startPos.y + i;
             }
 
-            if (game.PositionOnBoard(fx, fy) && game.GetPosition(fx, fy) == null && !game.IsCustomObstacle(fx, fy))
+            /*if (game.PositionOnBoard(fx, fy) && game.GetPosition(fx, fy) == null && !game.IsCustomObstacle(fx, fy))
             {
                 GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 wall.transform.localScale = new Vector3(1f, 1f, 0.5f);
@@ -103,7 +103,7 @@ public class CommanderSkill : MonoBehaviour
             else
             {
                 Debug.LogWarning($"Tidak bisa menempatkan Firewall di ({fx}, {fy}). Sudah ada bidak/rintangan atau di luar papan.");
-            }
+            }*/
         }
     }
 
