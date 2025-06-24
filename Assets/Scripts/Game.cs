@@ -42,6 +42,11 @@ public class Game : MonoBehaviour
     private Dictionary<Vector2Int, int> activeEarthObstacles = new Dictionary<Vector2Int, int>(); // Key: Posisi, Value: Durasi tersisa
     private Dictionary<Vector2Int, GameObject> visualEarthObstacles = new Dictionary<Vector2Int, GameObject>(); // Key: Posisi, Value: Objek visual penghalang Earth
     public GameObject earthObstaclePrefab; // Prefab visual untuk petak yang tidak bisa ditempati (Earth Stun)
+
+    // EFEK EARTH STUN UNTUK BIDAK (KARENA TIDAK BISA DIGABUNG DENGAN YANG BIASA)
+    public GameObject earthStunEffectOnPiecePrefab; // VFX untuk bidak yang distun EarthStun
+    public GameObject unearthEffectPrefab; //VFX Unearth bidak
+    private Dictionary<GameObject, GameObject> activeEarthStunEffectsOnPieces = new Dictionary<GameObject, GameObject>(); // Melacak efek visual EarthStun pada bidak
     // --- Akhir Tambahan ---
 
     private string currentPlayer = "white";
@@ -89,10 +94,12 @@ public class Game : MonoBehaviour
         }
 
         List<GameObject> frozenKeys = new List<GameObject>(frozenPieces.Keys);
+        //PENAMBAHAN EFEK UNEARTH
         List<GameObject> piecesToUnfreeze = new List<GameObject>();
-
-        foreach (GameObject piece in frozenKeys)
+        // Iterasi untuk semua bidak yang beku/stun
+        foreach (var entry in new List<KeyValuePair<GameObject, int>>(frozenPieces))
         {
+            GameObject piece = entry.Key;
             if (piece != null)
             {
                 frozenPieces[piece]--;
@@ -103,36 +110,35 @@ public class Game : MonoBehaviour
             }
             else
             {
+                // Bidak sudah null (mungkin dimakan), masukkan untuk pembersihan
                 piecesToUnfreeze.Add(piece);
             }
         }
 
         foreach (GameObject piece in piecesToUnfreeze)
         {
+            // Ini akan memanggil UnfreezePiece, yang akan menangani visual umum dan spesifik
             UnfreezePiece(piece);
         }
 
-        // --- PERBAIKAN: Buat salinan kunci untuk iterasi activeEarthObstacles ---
-        List<Vector2Int> earthObstacleKeys = new List<Vector2Int>(activeEarthObstacles.Keys); // Salin daftar kunci
+        // --- Manajemen aktifEarthObstacles (untuk petak, bukan bidak) ---
         List<Vector2Int> squaresToClearImpassable = new List<Vector2Int>();
-        foreach (Vector2Int pos in earthObstacleKeys) // Iterasi melalui salinan kunci
+        foreach (var entry in new List<KeyValuePair<Vector2Int, int>>(activeEarthObstacles))
         {
-            if (activeEarthObstacles.ContainsKey(pos)) // Periksa lagi, jaga-jaga kalau sudah dihapus
+            Vector2Int pos = entry.Key;
+            activeEarthObstacles[pos]--;
+            if (activeEarthObstacles[pos] <= 0)
             {
-                activeEarthObstacles[pos]--; // Kurangi durasi
-                if (activeEarthObstacles[pos] <= 0)
-                {
-                    squaresToClearImpassable.Add(pos);
-                }
+                squaresToClearImpassable.Add(pos);
             }
         }
 
         foreach (Vector2Int pos in squaresToClearImpassable)
         {
-            RemoveTemporaryImpassableSquare(pos);
+            RemoveTemporaryImpassableSquare(pos); // Ini yang menghapus visual tanah dari petak kosong
+                                                  // Efek unearth untuk bidak tidak dipicu di sini, karena ini hanya untuk petak kosong.
         }
-        // --- AKHIR PERBAIKAN ---
-
+        // --- Akhir Manajemen aktifEarthObstacles ---
 
         currentPlayer = currentPlayer == "white" ? "black" : "white";
         currentTimer = turnTime;
@@ -241,8 +247,23 @@ public class Game : MonoBehaviour
             activeEarthObstacles.Remove(pos);
             if (visualEarthObstacles.ContainsKey(pos) && visualEarthObstacles[pos] != null)
             {
-                Destroy(visualEarthObstacles[pos]);
+                Destroy(visualEarthObstacles[pos]); // Menghancurkan objek visual tanah
                 visualEarthObstacles.Remove(pos);
+
+                // --- BARU: Instansiasi efek Unearth pada petak papan catur ---
+                if (unearthEffectPrefab != null)
+                {
+                    // Gunakan posisi yang sama dengan objek visual tanah yang dihancurkan
+                    // Sesuaikan Z agar efek muncul di atas papan
+                    Vector3 effectPos = new Vector3(pos.x * 1.1f - 3.8f, pos.y * 1.1f - 3.8f, -4.0f); // Z yang sama dengan prefab tanah
+                    Instantiate(unearthEffectPrefab, effectPos, Quaternion.identity);
+                    Debug.Log($"Efek 'Unearth' dipicu pada petak ({pos.x},{pos.y}).");
+                }
+                else
+                {
+                    Debug.LogWarning("unearthEffectPrefab tidak diatur di Inspector untuk efek pada papan!");
+                }
+                // --- AKHIR BARU ---
             }
             Debug.Log($"Petak ({pos.x},{pos.y}) kini bisa dilewati lagi.");
         }
@@ -946,34 +967,37 @@ public class Game : MonoBehaviour
                             SpriteRenderer sr = pieceToFreeze.GetComponent<SpriteRenderer>();
                             if (sr != null)
                             {
-                                sr.color = Color.gray; // Warna beku/stun untuk Earth
+                                //sr.color = Color.gray; // Warna beku/stun untuk Earth
                             }
                             Debug.Log($"Bidak {pieceToFreeze.name} di ({targetX},{targetY}) dibekukan/distun selama {duration} giliran!");
+                            // --- BARU: Instansiasi efek visual Earth Stun pada bidak ---
+                            if (earthStunEffectOnPiecePrefab != null)
+                            {
+                                // Sesuaikan posisi Z agar efek muncul di atas bidak
+                                Vector3 effectPos = pieceToFreeze.transform.position;
+                                effectPos.z -= 0.1f; // Sesuaikan sesuai kebutuhan agar terlihat di atas bidak
+                                GameObject stunEffect = Instantiate(earthStunEffectOnPiecePrefab, effectPos, Quaternion.identity);
+                                stunEffect.transform.SetParent(pieceToFreeze.transform); // Agar efek mengikuti bidak
+                                activeEarthStunEffectsOnPieces[pieceToFreeze] = stunEffect;
+                            }
+                            // --- AKHIR BARU ---
+
                         }
                     }
                     else if (pieceToFreeze == null)
                     {
-                        // IKI EARTH SUUUUU (EFEK KOTAK GATHEL)
+                        AddTemporaryImpassableSquare(targetX, targetY, duration);
+                        // IKI EARTH
                         // Jika petak kosong, jadikan obstacle tidak dapat ditempati
                         // Periksa apakah sudah ada obstacle lain di sana (misalnya Firewall)
-                        if (!allCustomObstacles.ContainsKey(new Vector2Int(targetX, targetY)) && !activeEarthObstacles.ContainsKey(new Vector2Int(targetX, targetY)))
+                        /*if (!allCustomObstacles.ContainsKey(new Vector2Int(targetX, targetY)) && !activeEarthObstacles.ContainsKey(new Vector2Int(targetX, targetY)))
                         {
-                            GameObject obstacleVisual = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                            obstacleVisual.transform.localScale = new Vector3(1f, 1f, 0.5f);
-                            obstacleVisual.transform.position = new Vector3(targetX * 1.1f - 3.8f, targetY * 1.1f - 3.8f, -5.0f); // Posisi Z di bawah bidak
-                            obstacleVisual.name = "EarthStunObstacle";
-                            obstacleVisual.GetComponent<Renderer>().material.color = new Color(0.5f, 0.25f, 0f, 0.7f); // Warna tanah
-
-                            obstacleVisual.AddComponent<BoxCollider2D>();
-
-                            activeEarthObstacles[new Vector2Int(targetX, targetY)] = duration; // Daftarkan durasi
-                            visualEarthObstacles[new Vector2Int(targetX, targetY)] = obstacleVisual; // Daftarkan objek visual
-                            Debug.Log($"EarthStun obstacle ditempatkan di ({targetX},{targetY}) selama {duration} giliran!");
+                            
                         }
                         else
                         {
                             Debug.LogWarning($"Petak ({targetX},{targetY}) sudah ada obstacle, tidak bisa menempatkan EarthStun obstacle.");
-                        }
+                        }*/
                     }
                     else
                     {
@@ -994,42 +1018,96 @@ public class Game : MonoBehaviour
 
     private void UnfreezePiece(GameObject piece)
     {
+        if (piece == null)
+        {
+            Debug.LogWarning("UnfreezePiece dipanggil dengan bidak null.");
+            return;
+        }
+
+        // Mengidentifikasi apakah bidak ini dibekukan oleh EarthStun sebelum pemrosesan.
+        // Kita cek apakah ada efek visual EarthStun yang aktif pada bidak ini.
+        bool wasAffectedByEarthStun = activeEarthStunEffectsOnPieces.ContainsKey(piece);
+
+        // Langkah 1: Hapus durasi bidak dari frozenPieces (karena durasinya baru saja berakhir)
+        // Penting: Lakukan ini di awal agar pengecekan "masih beku?" di bawah akurat.
         if (frozenPieces.ContainsKey(piece))
         {
-            if (frozenPieces.ContainsKey(piece))
-            {
+            frozenPieces.Remove(piece);
+            Debug.Log($"Bidak {piece.name} durasi beku/stunnya sudah habis dan dihapus dari frozenPieces.");
+        }
+        else
+        {
+            // Jika tidak ada di frozenPieces, mungkin sudah dihapus atau tidak pernah beku
+            Debug.Log($"UnfreezePiece dipanggil untuk {piece.name} tetapi tidak ada di frozenPieces. Mungkin sudah bersih.");
+            return; // Tidak perlu melanjutkan jika bidak tidak terdaftar sebagai beku/stun
+        }
 
-                if (frozenEffects.ContainsKey(piece) && frozenEffects[piece] != null)
-                    {
-                    Destroy(frozenEffects[piece]);
-                     frozenEffects.Remove(piece);
-                    }
-                
-            }
-                frozenPieces.Remove(piece);
-            if (piece != null)
+        // Langkah 2: Kelola efek visual spesifik dan picu efek "un-" yang sesuai.
+        // Jika bidak sebelumnya terkena EarthStun (ada efek visual EarthStun di atasnya)
+        if (wasAffectedByEarthStun)
+        {
+            if (activeEarthStunEffectsOnPieces.ContainsKey(piece) && activeEarthStunEffectsOnPieces[piece] != null)
             {
-                SpriteRenderer sr = piece.GetComponent<SpriteRenderer>();
-                if (sr != null)
+                Destroy(activeEarthStunEffectsOnPieces[piece]);
+                activeEarthStunEffectsOnPieces.Remove(piece);
+                Debug.Log($"Efek visual EarthStun dihapus dari {piece.name}.");
+
+                // Picu efek Unearth (khusus untuk EarthStun)
+                if (unearthEffectPrefab != null)
                 {
-                    sr.color = Color.white;
-                    piece.GetComponent<Chessman>().Activate(); // Memuat ulang sprite asli dan warna default
-                }
-                Debug.Log($"Bidak {piece.name} tidak lagi beku.");
-                if (unfreezeEffectPrefab != null)
-                {
-                    // Pastikan efek muncul di posisi bidak yang tidak beku
                     Vector3 effectPos = piece.transform.position;
-                    // Sesuaikan Z jika perlu agar efek terlihat di atas bidak
-                    effectPos.z -= 0.9f;
-                    Instantiate(unfreezeEffectPrefab, effectPos, Quaternion.identity);
+                    effectPos.z -= 0.1f; // Sesuaikan Z agar efek muncul di atas bidak
+                    Instantiate(unearthEffectPrefab, effectPos, Quaternion.identity);
+                    Debug.Log($"Efek 'Unearth' dipicu untuk {piece.name}.");
                 }
-                
+                else
+                {
+                    Debug.LogWarning("unearthEffectPrefab tidak diatur di Inspector!");
+                }
+            }
+        }
+        // Jika bidak sebelumnya terkena IceFreeze (ada efek visual IceFreeze di atasnya)
+        // Catatan: Sebuah bidak bisa terkena keduanya. Urutan penghapusan penting.
+        // Kita asumsikan activeEarthStunEffectsOnPieces adalah prioritas untuk efek "un-" khusus.
+        // Jika tidak EarthStun, maka bisa jadi IceFreeze.
+        else if (frozenEffects.ContainsKey(piece) && frozenEffects[piece] != null) // Ini seharusnya hanya untuk IceFreeze
+        {
+            Destroy(frozenEffects[piece]);
+            frozenEffects.Remove(piece);
+            Debug.Log($"Efek visual IceFreeze dihapus dari {piece.name}.");
+
+            // Picu efek Unfreeze (khusus untuk IceFreeze/Umum)
+            if (unfreezeEffectPrefab != null)
+            {
+                Vector3 effectPos = piece.transform.position;
+                effectPos.z -= 0.9f; // Sesuaikan Z jika perlu
+                Instantiate(unfreezeEffectPrefab, effectPos, Quaternion.identity);
+                Debug.Log($"Efek 'Unfreeze' umum dipicu untuk {piece.name}.");
             }
             else
             {
-                Debug.Log($"Bidak yang sudah dibekukan tidak lagi ditemukan (mungkin sudah dimakan/dihancurkan).");
+                Debug.LogWarning("unfreezeEffectPrefab tidak diatur di Inspector!");
             }
+        }
+
+
+        // Langkah 3: Kembalikan warna bidak ke normal dan aktifkan kembali
+        // HANYA JIKA bidak tersebut tidak lagi memiliki efek beku/stun yang aktif.
+        if (!frozenPieces.ContainsKey(piece)) // Periksa apakah bidak benar-benar bebas dari semua efek
+        {
+            SpriteRenderer sr = piece.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                sr.color = Color.white; // Kembalikan warna asli
+                piece.GetComponent<Chessman>().Activate(); // Memuat ulang sprite asli dan warna default
+            }
+            Debug.Log($"Bidak {piece.name} kini sepenuhnya bebas dan aktif kembali.");
+        }
+        else
+        {
+            // Bidak masih memiliki efek beku/stun lain yang aktif (misalnya IceFreeze masih berjalan
+            // sementara EarthStunnya sudah habis). Jangan kembalikan warna atau aktifkan.
+            Debug.Log($"Bidak {piece.name} masih memiliki efek beku/stun yang tersisa. Warna dan status tetap dipertahankan.");
         }
     }
 

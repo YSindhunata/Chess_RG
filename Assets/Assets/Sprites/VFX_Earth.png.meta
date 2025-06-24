@@ -1,0 +1,318 @@
+fileFormatVersion: 2
+guid: 08f0aacd9620ac54ea3fafafffa97efe
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8741229721365088007
+    second: VFX_Earth_0
+  - first:
+      213: 9114946669774136404
+    second: VFX_Earth_1
+  - first:
+      213: 7384190140512593956
+    second: VFX_Earth_2
+  - first:
+      213: 3001978572375341485
+    second: VFX_Earth_3
+  - first:
+      213: 2085852475226578287
+    second: VFX_Earth_4
+  - first:
+      213: 801444749679230756
+    second: VFX_Earth_5
+  - first:
+      213: 3282369276120821894
+    second: VFX_Earth_6
+  - first:
+      213: 2808375791739651375
+    second: VFX_Earth_7
+  - first:
+      213: -626367308027358308
+    second: VFX_Earth_8
+  - first:
+      213: -8298183872631233007
+    second: VFX_Earth_9
+  - first:
+      213: -2947593033903852396
+    second: VFX_Earth_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: VFX_Earth_0
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 156
+        width: 15
+        height: 7
+      alignment: 9
+      pivot: {x: 0.4681834, y: 0.8408988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7078d0a5e161f4970800000000000000
+      internalID: 8741229721365088007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Earth_1
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 156
+        width: 15
+        height: 9
+      alignment: 9
+      pivot: {x: 0.4681834, y: 0.8408988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 454648ef3bbce7e70800000000000000
+      internalID: 9114946669774136404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Earth_2
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 157
+        width: 28
+        height: 11
+      alignment: 9
+      pivot: {x: 0.4681834, y: 0.8408988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 428e1374fc9e97660800000000000000
+      internalID: 7384190140512593956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Earth_3
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 109
+        width: 35
+        height: 16
+      alignment: 9
+      pivot: {x: 0.4681834, y: 0.8408988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da934cd3b9b29a920800000000000000
+      internalID: 3001978572375341485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Earth_4
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 109
+        width: 34
+        height: 15
+      alignment: 9
+      pivot: {x: 0.4681834, y: 0.8408988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6ddfbf56cf62fc10800000000000000
+      internalID: 2085852475226578287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Earth_5
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 109
+        width: 34
+        height: 15
+      alignment: 9
+      pivot: {x: 0.4681834, y: 0.8408988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42f7bbbe0cd4f1b00800000000000000
+      internalID: 801444749679230756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VFX_Earth_6
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 109
+        width: 33
+        height: 14
+      alignment: 9
+      pivot: {x: 0.4840917, y: 0.8408988}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68076d447715d8d20800000000000000
+      internalID: 3282369276120821894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: ba7cfe251567843459b0bfa0f02142dd
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      VFX_Earth_11: -1551392019
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
