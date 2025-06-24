@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ed3780936f3064781f7407c1413767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetMultiplier: 30
+  offsetMultiplier: 46
   smoothTime: 0.3
 --- !u!1 &243712470
 GameObject:
@@ -863,7 +863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ed3780936f3064781f7407c1413767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetMultiplier: 45
+  offsetMultiplier: 98
   smoothTime: 0.3
 --- !u!1 &1369336939
 GameObject:
@@ -1057,7 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19ed3780936f3064781f7407c1413767, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetMultiplier: 25
+  offsetMultiplier: 24
   smoothTime: 0.3
 --- !u!1 &1624891449
 GameObject:
@@ -1307,7 +1307,7 @@ GameObject:
   - component: {fileID: 1931751144}
   - component: {fileID: 1931751143}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1344,9 +1344,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 248be31c14f30914d801665589e8a4dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spreadMagnitude: 789
+  spreadMagnitude: 452
   hoverRadius: 234
-  animationSpeed: 12
+  animationSpeed: 8
 --- !u!114 &1931751144
 MonoBehaviour:
   m_ObjectHideFlags: 0
