@@ -838,8 +838,8 @@ public class Game : MonoBehaviour
         Vector2 localPos;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPos, mainCamera, out localPos);
 
-        float buttonYSpacing = 100f;
-        float buttonXSpacing = -580f;
+        float buttonYSpacing = 300f;
+        float buttonXSpacing = -800f;
         float verticalButtonOffsetFromHorizontal = -60f;
 
         // Tombol Horizontal
