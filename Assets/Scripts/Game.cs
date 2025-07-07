@@ -20,6 +20,11 @@ public class Game : MonoBehaviour
     public Button restartButton;
     public Button homeButton;
 
+    // Tombol Pause
+    public GameObject pausePanel; // Panel UI yang berisi tombol lanjutkan/keluar
+    public Button pauseButton; // Tombol Jeda utama
+    private bool isPaused = false;
+
     // Timer giliran
     public TextMeshProUGUI turnTimerText;
     private float turnTime = 20f;
@@ -435,6 +440,13 @@ public class Game : MonoBehaviour
         if (restartButton != null) restartButton.gameObject.SetActive(false);
         if (homeButton != null) homeButton.gameObject.SetActive(false);
 
+        // Inisialisasi UI jeda
+        if (pausePanel != null) pausePanel.SetActive(false); // Sembunyikan panel jeda di awal
+        if (pauseButton != null)
+        {
+            pauseButton.onClick.AddListener(TogglePause); // Kaitkan fungsi TogglePause ke tombol jeda
+        }
+
         turnTimerText.text = Mathf.Ceil(currentTimer).ToString();
 
         if (mainCamera == null)
@@ -583,12 +595,36 @@ public class Game : MonoBehaviour
     public void OnRestartButtonClick()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
     }
 
     public void OnHomeButtonClick()
     {
-        SceneManager.LoadScene("Home");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
+
+    // === Metode untuk Jeda/Lanjutkan Game ===
+    public void TogglePause()
+    {
+        isPaused = !isPaused; // Balik status jeda
+
+        if (isPaused)
+        {
+            Time.timeScale = 0f; // Hentikan waktu game
+            timerRunning = false; // Hentikan timer giliran
+            if (pausePanel != null) pausePanel.SetActive(true); // Tampilkan panel jeda
+            Debug.Log("Game Dijeda.");
+        }
+        else
+        {
+            Time.timeScale = 1f; // Lanjutkan waktu game
+            timerRunning = true; // Lanjutkan timer giliran
+            if (pausePanel != null) pausePanel.SetActive(false); // Sembunyikan panel jeda
+            Debug.Log("Game Dilanjutkan.");
+        }
+    }
+
 
     public void EnterSkillPlacementMode(CommanderSkill.SkillType skillType)
     {
@@ -916,7 +952,7 @@ public class Game : MonoBehaviour
                 SpriteRenderer sr = pieceToFreeze.GetComponent<SpriteRenderer>();
                 //if (sr != null)
                 //{
-                    //sr.color = Color.cyan;
+                //sr.color = Color.cyan;
                 //}
                 Debug.Log($"Bidak {pieceToFreeze.name} dibekukan selama {freezeDuration} giliran!");
                 if (freezeEffectPrefab != null)
@@ -928,9 +964,9 @@ public class Game : MonoBehaviour
                     GameObject freezeEffect = Instantiate(freezeEffectPrefab, effectPos, Quaternion.identity);
                     // Atur parent agar efek mengikuti bidak jika bidak bergerak
                     freezeEffect.transform.SetParent(pieceToFreeze.transform);
-                    frozenEffects[pieceToFreeze] = freezeEffect; 
+                    frozenEffects[pieceToFreeze] = freezeEffect;
                 }
-               
+
             }
             else
             {
@@ -1126,10 +1162,10 @@ public class Game : MonoBehaviour
 
         turnTimerText.text = Mathf.Ceil(currentTimer).ToString();
 
-       // if (IsCheckmate(currentPlayer)) // asumsikan ini method boolean
-       // {
-       //     bgMusic.PlayVictorySound();
-       // }
+        // if (IsCheckmate(currentPlayer)) // asumsikan ini method boolean
+        // {
+        //     bgMusic.PlayVictorySound();
+        // }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
