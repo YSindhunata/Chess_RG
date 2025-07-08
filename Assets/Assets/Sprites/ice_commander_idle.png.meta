@@ -1,34 +1,31 @@
 fileFormatVersion: 2
-guid: fe28c58742c347147adaa36794f501b9
+guid: 75fa415e7967b3b439ed48f0cea8c6c1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4320295261928297051
-    second: logo_0
+      213: -5776170735201811425
+    second: ice_commander_idle_0
   - first:
-      213: 5470614613321624601
-    second: logo_1
+      213: -5159217511606535378
+    second: ice_commander_idle_1
   - first:
-      213: 4560591551370500262
-    second: logo_2
+      213: 243259702177857409
+    second: ice_commander_idle_2
   - first:
-      213: 6640445872580291462
-    second: logo_3
+      213: 3370281712792100824
+    second: ice_commander_idle_3
   - first:
-      213: 7220771215297418599
-    second: logo_4
+      213: -2948161501571492859
+    second: ice_commander_idle_4
   - first:
-      213: -8223382129855978605
-    second: logo_5
+      213: 2722423090652640230
+    second: ice_commander_idle_5
   - first:
-      213: -1318215486492414624
-    second: logo_6
+      213: 7239525533982063796
+    second: ice_commander_idle_6
   - first:
-      213: 2547678001213806659
-    second: logo_7
-  - first:
-      213: 7966619702581107187
-    second: logo_8
+      213: 779601781331076257
+    second: ice_commander_idle_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -137,13 +134,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: logo_0
+      name: ice_commander_idle_0
       rect:
         serializedVersion: 2
-        x: 813
-        y: 904
-        width: 874
-        height: 882
+        x: 182
+        y: 17
+        width: 577
+        height: 986
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,64 +149,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5ade5f3695a3b04c0800000000000000
-      internalID: -4320295261928297051
+      spriteID: f140a4ed15be6dfa0800000000000000
+      internalID: -5776170735201811425
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_1
+      name: ice_commander_idle_1
       rect:
         serializedVersion: 2
-        x: 894
-        y: 1768
-        width: 15
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 91ca81a91078beb40800000000000000
-      internalID: 5470614613321624601
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logo_2
-      rect:
-        serializedVersion: 2
-        x: 1170
-        y: 1690
-        width: 67
-        height: 130
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6a816195ad97a4f30800000000000000
-      internalID: 4560591551370500262
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: logo_3
-      rect:
-        serializedVersion: 2
-        x: 0
+        x: 1205
         y: 0
-        width: 2048
-        height: 924
+        width: 583
+        height: 1005
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,20 +171,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 68b6b59a65a972c50800000000000000
-      internalID: 6640445872580291462
+      spriteID: e2bb7b50207c668b0800000000000000
+      internalID: -5159217511606535378
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_4
+      name: ice_commander_idle_2
       rect:
         serializedVersion: 2
-        x: 349
-        y: 916
-        width: 531
-        height: 735
+        x: 2231
+        y: 11
+        width: 576
+        height: 994
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -240,20 +193,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7651b2cb925553460800000000000000
-      internalID: 7220771215297418599
+      spriteID: 18f7a78096b306300800000000000000
+      internalID: 243259702177857409
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_5
+      name: ice_commander_idle_3
       rect:
         serializedVersion: 2
-        x: 211
-        y: 628
-        width: 214
-        height: 270
+        x: 3255
+        y: 11
+        width: 576
+        height: 995
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -262,20 +215,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 393a3a1b58da0ed80800000000000000
-      internalID: -8223382129855978605
+      spriteID: 8dfd7fb7c55a5ce20800000000000000
+      internalID: 3370281712792100824
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_6
+      name: ice_commander_idle_4
       rect:
         serializedVersion: 2
-        x: 270
-        y: 618
-        width: 20
-        height: 19
+        x: 4279
+        y: 11
+        width: 576
+        height: 995
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -284,20 +237,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 06d633ecff1c4bde0800000000000000
-      internalID: -1318215486492414624
+      spriteID: 504595efbb60617d0800000000000000
+      internalID: -2948161501571492859
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_7
+      name: ice_commander_idle_5
       rect:
         serializedVersion: 2
-        x: 1780
-        y: 629
-        width: 35
-        height: 27
+        x: 5303
+        y: 11
+        width: 576
+        height: 995
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -306,20 +259,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3481d68d4ab2b5320800000000000000
-      internalID: 2547678001213806659
+      spriteID: 6e3fbae706df7c520800000000000000
+      internalID: 2722423090652640230
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: logo_8
+      name: ice_commander_idle_6
       rect:
         serializedVersion: 2
-        x: 1019
-        y: 511
-        width: 20
-        height: 18
+        x: 6327
+        y: 11
+        width: 576
+        height: 994
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -328,8 +281,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3f999f8196e1f8e60800000000000000
-      internalID: 7966619702581107187
+      spriteID: 4bcfe53dd16f77460800000000000000
+      internalID: 7239525533982063796
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ice_commander_idle_7
+      rect:
+        serializedVersion: 2
+        x: 7351
+        y: 10
+        width: 577
+        height: 996
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a4208a80b3b1da00800000000000000
+      internalID: 779601781331076257
       vertices: []
       indices: 
       edges: []
@@ -347,16 +322,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      logo_0: -4320295261928297051
-      logo_1: 5470614613321624601
-      logo_2: 4560591551370500262
-      logo_3: 6640445872580291462
-      logo_4: 7220771215297418599
-      logo_5: -8223382129855978605
-      logo_6: -1318215486492414624
-      logo_7: 2547678001213806659
-      logo_8: 7966619702581107187
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

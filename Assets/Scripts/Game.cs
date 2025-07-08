@@ -82,6 +82,11 @@ public class Game : MonoBehaviour
     public GameObject firewallSegmentPrefab; //VFX firewall
     public BgMusic bgMusic; // drag GameObject dengan script BgMusic ke sini
 
+    //Referensi Animator 
+    private Animator whiteIceCommanderAnimator;
+    // NEW: Reference to the Animator for the black Ice Commander
+    private Animator blackIceCommanderAnimator;
+
     public string GetCurrentPlayer()
     {
         return currentPlayer;
@@ -147,6 +152,8 @@ public class Game : MonoBehaviour
 
         currentPlayer = currentPlayer == "white" ? "black" : "white";
         currentTimer = turnTime;
+        // NEW: Reset commander visual animation to idle if it was skill animation
+        ResetCommanderVisualAnimation();
 
         GameObject[] allPiecesInPlay = playerWhite.Concat(playerBlack).ToArray();
         foreach (GameObject piece in allPiecesInPlay)
@@ -203,6 +210,38 @@ public class Game : MonoBehaviour
             ShowGameOverUI();
         }
         Debug.Log("--- NextTurn() selesai --- CurrentPlayer setelah ganti: " + currentPlayer);
+    }
+
+    // NEW: Method to reset commander visual animation to idle
+    private void ResetCommanderVisualAnimation()
+    {
+        // Reset White Commander visual animation if it's an Ice Commander
+        GameObject visualCommanderP1 = GameObject.Find("CommanderVisual_P1");
+        if (visualCommanderP1 != null)
+        {
+            CommanderSkill skill = visualCommanderP1.GetComponent<CommanderSkill>();
+            if (skill != null && skill.skillType == CommanderSkill.SkillType.IceFreeze)
+            {
+                if (whiteIceCommanderAnimator != null)
+                {
+                    whiteIceCommanderAnimator.Play("ice_commander_idle"); // Play idle animation
+                }
+            }
+        }
+
+        // Reset Black Commander visual animation if it's an Ice Commander
+        GameObject visualCommanderP2 = GameObject.Find("CommanderVisual_P2");
+        if (visualCommanderP2 != null)
+        {
+            CommanderSkill skill = visualCommanderP2.GetComponent<CommanderSkill>();
+            if (skill != null && skill.skillType == CommanderSkill.SkillType.IceFreeze)
+            {
+                if (blackIceCommanderAnimator != null)
+                {
+                    blackIceCommanderAnimator.Play("ice_commander_idle"); // Play idle animation
+                }
+            }
+        }
     }
 
     public void RemoveFirewallForPlayer(string playerColor)
@@ -458,28 +497,38 @@ public class Game : MonoBehaviour
         string p1Type = PlayerPrefs.GetString("P1Commander", "plain");
         if (p1Type != "plain")
         {
-            GameObject prefab = Resources.Load<GameObject>("CommanderFire");
-            if (prefab != null)
+            // PENTING: Muat prefab yang spesifik berdasarkan jenis commander
+            GameObject commanderVisualPrefab = Resources.Load<GameObject>(p1Type + "CommanderVisualPrefab"); // Contoh: "IceCommanderVisualPrefab"
+
+            if (commanderVisualPrefab != null)
             {
-                GameObject commanderP1 = Instantiate(prefab, new Vector3(-3.5f, -6.25f, -1f), Quaternion.identity);
+                GameObject commanderP1 = Instantiate(commanderVisualPrefab, new Vector3(-3.5f, -6.25f, -1f), Quaternion.identity);
                 commanderP1.name = "CommanderVisual_P1";
 
-                SpriteRenderer sr = commanderP1.GetComponent<SpriteRenderer>();
-                if (sr != null)
-                {
-                    sr.sprite = Resources.Load<Sprite>(p1Type + "_commander");
-                    commanderP1.transform.localScale = new Vector3(0.35f, 0.35f, -1f);
-                }
+                // Karena prefab sudah memiliki SpriteRenderer dan Animator yang terpasang,
+                // Anda tidak perlu lagi mengatur sprite atau menambah Animator secara dinamis di sini.
+                // Animator sudah akan mulai dengan idle karena sudah diatur di Animator Controller.
 
                 CommanderSkill skill = commanderP1.AddComponent<CommanderSkill>();
                 skill.skillType = ParseSkillType(p1Type);
                 skill.cooldownTurns = 5;
 
                 commanderP1.AddComponent<CommanderClick>();
+
+                // Simpan referensi animator jika tipe commander adalah ice
+                if (p1Type == "ice")
+                {
+                    whiteIceCommanderAnimator = commanderP1.GetComponent<Animator>();
+                    if (whiteIceCommanderAnimator == null)
+                    {
+                        Debug.LogError("Animator tidak ditemukan di IceCommanderVisualPrefab!");
+                    }
+                }
+                // Tambahkan juga untuk blackIceCommanderAnimator di bagian P2
             }
             else
             {
-                Debug.LogError("Prefab 'CommanderFire' tidak ditemukan di Resources! Pastikan sudah ada.");
+                Debug.LogError($"Prefab visual '{p1Type}CommanderVisualPrefab' tidak ditemukan di Resources! Pastikan sudah ada dan namanya benar.");
             }
         }
 
@@ -487,28 +536,31 @@ public class Game : MonoBehaviour
         string p2Type = PlayerPrefs.GetString("P2Commander", "plain");
         if (p2Type != "plain")
         {
-            GameObject prefab2 = Resources.Load<GameObject>("CommanderFire");
-            if (prefab2 != null)
-            {
-                GameObject commanderP2 = Instantiate(prefab2, new Vector3(3.5f, 6f, -1f), Quaternion.identity);
-                commanderP2.name = "CommanderVisual_P2";
+            GameObject commanderVisualPrefab = Resources.Load<GameObject>(p2Type + "CommanderVisualPrefab"); // Contoh: "FireCommanderVisualPrefab"
 
-                SpriteRenderer sr = commanderP2.GetComponent<SpriteRenderer>();
-                if (sr != null)
-                {
-                    sr.sprite = Resources.Load<Sprite>(p2Type + "_commander");
-                    commanderP2.transform.localScale = new Vector3(1.25f, 1f, -1f);
-                }
+            if (commanderVisualPrefab != null)
+            {
+                GameObject commanderP2 = Instantiate(commanderVisualPrefab, new Vector3(3.5f, 6.25f, -1f), Quaternion.identity);
+                commanderP2.name = "CommanderVisual_P2";
 
                 CommanderSkill skill = commanderP2.AddComponent<CommanderSkill>();
                 skill.skillType = ParseSkillType(p2Type);
                 skill.cooldownTurns = 5;
 
                 commanderP2.AddComponent<CommanderClick>();
+
+                if (p2Type == "ice")
+                {
+                    blackIceCommanderAnimator = commanderP2.GetComponent<Animator>();
+                    if (blackIceCommanderAnimator == null)
+                    {
+                        Debug.LogError("Animator tidak ditemukan di IceCommanderVisualPrefab!");
+                    }
+                }
             }
             else
             {
-                Debug.LogError("Prefab 'CommanderFire' tidak ditemukan di Resources! Pastikan sudah ada.");
+                Debug.LogError($"Prefab visual '{p2Type}CommanderVisualPrefab' tidak ditemukan di Resources! Pastikan sudah ada dan namanya benar.");
             }
         }
 
@@ -640,6 +692,19 @@ public class Game : MonoBehaviour
             Destroy(currentMovePlates[i]);
         }
 
+        // NEW: Trigger skill animation for Ice Commander
+        if (skillType == CommanderSkill.SkillType.IceFreeze)
+        {
+            if (currentPlayer == "white" && whiteIceCommanderAnimator != null)
+            {
+                whiteIceCommanderAnimator.SetTrigger("UseSkill");
+            }
+            else if (currentPlayer == "black" && blackIceCommanderAnimator != null)
+            {
+                blackIceCommanderAnimator.SetTrigger("UseSkill");
+            }
+        }
+
         ShowSkillPlacementOptions();
     }
 
@@ -659,7 +724,7 @@ public class Game : MonoBehaviour
         Debug.Log("Menampilkan opsi penempatan skill untuk: " + currentSkillToPlace);
         ClearSkillPlacementPlates();
         HideOrientationButtons();
-
+            
         for (int x = 0; x < 8; x++)
         {
             for (int y = 0; y < 8; y++)
@@ -753,6 +818,15 @@ public class Game : MonoBehaviour
                 Debug.Log("Memanggil NextTurn() karena target Freeze tidak valid.");
                 NextTurn();
                 UpdateCommanderCooldownUI();
+            }
+            // NEW: After skill placement, reset Ice Commander animation to idle
+            if (currentPlayer == "white" && whiteIceCommanderAnimator != null)
+            {
+                whiteIceCommanderAnimator.Play("ice_commander_idle");
+            }
+            else if (currentPlayer == "black" && blackIceCommanderAnimator != null)
+            {
+                blackIceCommanderAnimator.Play("ice_commander_idle");
             }
         }
         else if (currentSkillToPlace == CommanderSkill.SkillType.EarthStun)
