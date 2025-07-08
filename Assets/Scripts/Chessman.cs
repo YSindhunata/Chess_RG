@@ -118,14 +118,6 @@ public class Chessman : MonoBehaviour
             Game sc = Controller.GetComponent<Game>();
             GameObject targetPiece = sc.GetPosition(move.x, move.y);
 
-            // Jika bidak target adalah Raja lawan, jangan spawn MovePlateAttactSpawn
-            // Ini seharusnya sudah difilter oleh GetLegalMoves, tapi ini adalah safety net.
-            if (targetPiece != null && targetPiece.name.Contains("_king") && targetPiece.GetComponent<Chessman>().player != player)
-            {
-                // Jangan spawn attack move plate untuk raja lawan
-                continue;
-            }
-
             if (targetPiece != null && targetPiece.GetComponent<Chessman>().player != player)
             {
                 MovePlateAttactSpawn(move.x, move.y);
@@ -150,15 +142,17 @@ public class Chessman : MonoBehaviour
             // Periksa jika ada Firewall atau EarthStun obstacle yang menghalangi
             if (sc.IsCustomObstacle(x, y))
             {
+                // Jika itu Firewall, periksa pemiliknya
                 string obstaclePlayerColor = sc.GetObstacleOwnerColor(x, y);
                 if (obstaclePlayerColor != null && obstaclePlayerColor != player) // Ini adalah Firewall musuh
                 {
-                    break;
+                    break; // Bidak lurus tidak bisa melewati firewall musuh
                 }
                 else if (obstaclePlayerColor == null && sc.IsTemporarilyImpassable(x, y)) // Ini EarthStun obstacle
                 {
-                    break;
+                    break; // EarthStun obstacle menghalangi semua bidak lurus
                 }
+                // Jika firewall milik sendiri, bidak bisa terus bergerak melewatinya (tidak ada break)
             }
 
             GameObject cp = sc.GetPosition(x, y);
@@ -168,29 +162,22 @@ public class Chessman : MonoBehaviour
             }
             else
             {
-                // --- PERBAIKAN: Raja tidak bisa dimakan ---
-                // Jika bidak target adalah Raja lawan, maka bidak ini tidak bisa bergerak ke petak itu
-                if (cp.name.Contains("_king") && cp.GetComponent<Chessman>().player != player)
-                {
-                    break; // Bidak tidak bisa makan Raja lawan
-                }
-                // --- AKHIR PERBAIKAN ---
-
-                if (cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh (bukan Raja)
+                // Cek apakah target serangan berada di atas firewall musuh atau EarthStun obstacle
+                if (cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh
                 {
                     if (sc.IsCustomObstacle(x, y))
                     {
                         string obstacleOwner = sc.GetObstacleOwnerColor(x, y);
                         if (obstacleOwner != null && obstacleOwner != player) // Firewall musuh
                         {
-                            break;
+                            break; // Tidak bisa menyerang bidak di atas firewall musuh
                         }
-                        else if (sc.IsTemporarilyImpassable(x, y)) // EarthStun obstacle
+                        else if (obstacleOwner == null && sc.IsTemporarilyImpassable(x, y)) // EarthStun obstacle
                         {
-                            break;
+                            break; // Tidak bisa menyerang bidak di atas EarthStun obstacle
                         }
                     }
-                    result.Add(new Vector2Int(x, y)); // Bisa serang
+                    result.Add(new Vector2Int(x, y)); // Bisa serang jika tidak ada obstacle penghalang
                 }
                 break; // Bidak lurus berhenti jika ada bidak lain (sendiri atau musuh)
             }
@@ -212,25 +199,16 @@ public class Chessman : MonoBehaviour
 
         if (sc.PositionOnBoard(x, y))
         {
-            GameObject cp = sc.GetPosition(x, y);
-
-            // --- PERBAIKAN: Raja tidak bisa dimakan ---
-            // Jika bidak target adalah Raja lawan, maka bidak ini tidak bisa bergerak ke petak itu
-            if (cp != null && cp.name.Contains("_king") && cp.GetComponent<Chessman>().player != player)
-            {
-                return; // Bidak tidak bisa makan Raja lawan
-            }
-            // --- AKHIR PERBAIKAN ---
-
             bool isTargetObstacle = sc.IsCustomObstacle(x, y);
             string obstacleOwnerColor = isTargetObstacle ? sc.GetObstacleOwnerColor(x, y) : null;
-            bool isEarthObstacle = sc.IsTemporarilyImpassable(x, y);
+            bool isEarthObstacle = sc.IsTemporarilyImpassable(x, y); // Periksa EarthStun obstacle
 
             if (isTargetObstacle) // Jika posisi target adalah Firewall atau EarthStun obstacle
             {
                 if (this.name == player + "_knight")
                 {
-                    return; // Kuda bisa melompati kedua jenis obstacle, tapi TIDAK BISA menempati keduanya
+                    // Kuda bisa melompati kedua jenis obstacle, tapi TIDAK BISA menempati keduanya
+                    return;
                 }
                 else // Bidak lain (Raja, Pion)
                 {
@@ -246,9 +224,9 @@ public class Chessman : MonoBehaviour
                 }
             }
 
-
+            GameObject cp = sc.GetPosition(x, y);
             // Perkuat logika untuk menyerang bidak di atas obstacle musuh
-            if (cp != null && cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh (bukan Raja)
+            if (cp != null && cp.GetComponent<Chessman>().player != player) // Jika target adalah bidak musuh
             {
                 if (isTargetObstacle)
                 {
@@ -271,6 +249,10 @@ public class Chessman : MonoBehaviour
             {
                 rawMovesList.Add(new Vector2Int(x, y)); // Bisa menempati firewall sendiri
             }
+            // else if (cp == null && isTargetObstacle && isEarthObstacle) // Jika petak kosong dan ada EarthStun obstacle
+            // {
+            //     // Tidak ditambahkan karena EarthStun obstacle menghalangi semua bidak
+            // }
         }
     }
 
@@ -341,7 +323,6 @@ public class Chessman : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"Simulasi: Raja {player} tidak ditemukan! Ini bisa menyebabkan bug skakmat.");
             kingInCheck = true;
         }
 
@@ -440,15 +421,12 @@ public class Chessman : MonoBehaviour
                     int forwardTwoY = yBoard + dir * 2;
                     if (yBoard == startRow && sc.PositionOnBoard(forwardOneX, forwardTwoY) && sc.GetPosition(forwardOneX, forwardTwoY) == null)
                     {
-                        // Pion tidak bisa melompati obstacle (baik sendiri maupun musuh)
+                        // Pion tidak bisa melompati obstacle (meskipun milik sendiri)
                         // Periksa petak pertama dan petak kedua.
                         bool obstacleInFirstStep = sc.IsCustomObstacle(forwardOneX, forwardOneY) && sc.GetObstacleOwnerColor(forwardOneX, forwardOneY) != player;
                         bool obstacleInSecondStep = sc.IsCustomObstacle(forwardOneX, forwardTwoY) && sc.GetObstacleOwnerColor(forwardOneX, forwardTwoY) != player;
-                        bool firstStepIsEarthObstacle = sc.IsTemporarilyImpassable(forwardOneX, forwardOneY);
-                        bool secondStepIsEarthObstacle = sc.IsTemporarilyImpassable(forwardOneX, forwardTwoY);
 
-
-                        if (!obstacleInFirstStep && !obstacleInSecondStep && !firstStepIsEarthObstacle && !secondStepIsEarthObstacle)
+                        if (!obstacleInFirstStep && !obstacleInSecondStep)
                         {
                             rawMoves.Add(new Vector2Int(forwardOneX, forwardTwoY));
                         }
@@ -469,15 +447,10 @@ public class Chessman : MonoBehaviour
                         if (cp != null && cp.GetComponent<Chessman>().player != player)
                         {
                             // --- PERBAIKAN: Pion tidak bisa menyerang bidak di atas firewall musuh ---
-                            if (sc.IsCustomObstacle(targetX, targetY))
+                            if (sc.IsCustomObstacle(targetX, targetY) && sc.GetObstacleOwnerColor(targetX, targetY) != player)
                             {
-                                string obstacleOwner = sc.GetObstacleOwnerColor(targetX, targetY);
-                                bool isEarthObstacle = sc.IsTemporarilyImpassable(targetX, targetY);
-                                if ((obstacleOwner != null && obstacleOwner != player) || isEarthObstacle)
-                                {
-                                    // Jika ada firewall musuh atau EarthStun obstacle di bawah bidak yang diserang, tidak bisa serang
-                                    continue; // Skip serangan ini
-                                }
+                                // Jika ada firewall musuh di bawah bidak yang diserang, tidak bisa serang
+                                continue; // Skip serangan ini
                             }
                             // --- AKHIR PERBAIKAN ---
                             rawMoves.Add(new Vector2Int(targetX, targetY));
