@@ -1,31 +1,37 @@
 fileFormatVersion: 2
-guid: 75fa415e7967b3b439ed48f0cea8c6c1
+guid: 84e4ae7d04a068d4a8c0e7a326e080aa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5776170735201811425
-    second: ice_commander_idle_0
+      213: 5598962525367600916
+    second: Fire_Commander_Idle_0
   - first:
-      213: -5159217511606535378
-    second: ice_commander_idle_1
+      213: 6631753638957849663
+    second: Fire_Commander_Idle_1
   - first:
-      213: 243259702177857409
-    second: ice_commander_idle_2
+      213: -7364368348452956355
+    second: Fire_Commander_Idle_2
   - first:
-      213: 3370281712792100824
-    second: ice_commander_idle_3
+      213: -2832918088550335494
+    second: Fire_Commander_Idle_3
   - first:
-      213: -2948161501571492859
-    second: ice_commander_idle_4
+      213: -188611191335699417
+    second: Fire_Commander_Idle_4
   - first:
-      213: 2722423090652640230
-    second: ice_commander_idle_5
+      213: 3846062046866234999
+    second: Fire_Commander_Idle_5
   - first:
-      213: 7239525533982063796
-    second: ice_commander_idle_6
+      213: 4489920072576086388
+    second: Fire_Commander_Idle_6
   - first:
-      213: 779601781331076257
-    second: ice_commander_idle_7
+      213: -779470253784739854
+    second: Fire_Commander_Idle_7
+  - first:
+      213: 5279347207855633587
+    second: Fire_Commander_Idle_8
+  - first:
+      213: 8754908192579197715
+    second: Fire_Commander_Idle_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -134,13 +140,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ice_commander_idle_0
+      name: Fire_Commander_Idle_0
       rect:
         serializedVersion: 2
-        x: 182
-        y: 17
-        width: 577
-        height: 986
+        x: 281
+        y: 8
+        width: 452
+        height: 983
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -149,152 +155,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f140a4ed15be6dfa0800000000000000
-      internalID: -5776170735201811425
+      spriteID: 417824390c283bd40800000000000000
+      internalID: 5598962525367600916
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ice_commander_idle_1
+      name: Fire_Commander_Idle_1
       rect:
         serializedVersion: 2
-        x: 1205
-        y: 0
-        width: 583
-        height: 1005
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e2bb7b50207c668b0800000000000000
-      internalID: -5159217511606535378
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ice_commander_idle_2
-      rect:
-        serializedVersion: 2
-        x: 2231
-        y: 11
-        width: 576
-        height: 994
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 18f7a78096b306300800000000000000
-      internalID: 243259702177857409
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ice_commander_idle_3
-      rect:
-        serializedVersion: 2
-        x: 3255
-        y: 11
-        width: 576
-        height: 995
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8dfd7fb7c55a5ce20800000000000000
-      internalID: 3370281712792100824
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ice_commander_idle_4
-      rect:
-        serializedVersion: 2
-        x: 4279
-        y: 11
-        width: 576
-        height: 995
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 504595efbb60617d0800000000000000
-      internalID: -2948161501571492859
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ice_commander_idle_5
-      rect:
-        serializedVersion: 2
-        x: 5303
-        y: 11
-        width: 576
-        height: 995
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 6e3fbae706df7c520800000000000000
-      internalID: 2722423090652640230
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ice_commander_idle_6
-      rect:
-        serializedVersion: 2
-        x: 6327
-        y: 11
-        width: 576
-        height: 994
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4bcfe53dd16f77460800000000000000
-      internalID: 7239525533982063796
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ice_commander_idle_7
-      rect:
-        serializedVersion: 2
-        x: 7351
+        x: 1306
         y: 10
-        width: 577
-        height: 996
+        width: 450
+        height: 980
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -303,8 +177,184 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1a4208a80b3b1da00800000000000000
-      internalID: 779601781331076257
+      spriteID: f3c9cff4cc8b80c50800000000000000
+      internalID: 6631753638957849663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_2
+      rect:
+        serializedVersion: 2
+        x: 2332
+        y: 9
+        width: 400
+        height: 980
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d37d45351028cc990800000000000000
+      internalID: -7364368348452956355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_3
+      rect:
+        serializedVersion: 2
+        x: 3353
+        y: 9
+        width: 391
+        height: 980
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afbbd2602047fa8d0800000000000000
+      internalID: -2832918088550335494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_4
+      rect:
+        serializedVersion: 2
+        x: 4383
+        y: 10
+        width: 397
+        height: 980
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72cb5cbee1be16df0800000000000000
+      internalID: -188611191335699417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_5
+      rect:
+        serializedVersion: 2
+        x: 5407
+        y: 8
+        width: 399
+        height: 981
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77ed297ed05ff5530800000000000000
+      internalID: 3846062046866234999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_6
+      rect:
+        serializedVersion: 2
+        x: 6429
+        y: 8
+        width: 401
+        height: 982
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4713bc374866f4e30800000000000000
+      internalID: 4489920072576086388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_7
+      rect:
+        serializedVersion: 2
+        x: 7451
+        y: 8
+        width: 402
+        height: 983
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ff4d2a1fe3ce25f0800000000000000
+      internalID: -779470253784739854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_8
+      rect:
+        serializedVersion: 2
+        x: 8475
+        y: 7
+        width: 448
+        height: 978
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b47f2a7052044940800000000000000
+      internalID: 5279347207855633587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Idle_9
+      rect:
+        serializedVersion: 2
+        x: 9498
+        y: 5
+        width: 450
+        height: 982
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31b17db9d9eaf7970800000000000000
+      internalID: 8754908192579197715
       vertices: []
       indices: 
       edges: []
@@ -322,15 +372,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      ice_commander_idle_0: -5776170735201811425
-      ice_commander_idle_1: -5159217511606535378
-      ice_commander_idle_2: 243259702177857409
-      ice_commander_idle_3: 3370281712792100824
-      ice_commander_idle_4: -2948161501571492859
-      ice_commander_idle_5: 2722423090652640230
-      ice_commander_idle_6: 7239525533982063796
-      ice_commander_idle_7: 779601781331076257
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

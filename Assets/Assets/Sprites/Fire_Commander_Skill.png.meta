@@ -1,0 +1,518 @@
+fileFormatVersion: 2
+guid: 37af6b84792259041bc26ec71e180947
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -641591418906945590
+    second: Fire_Commander_Skill_0
+  - first:
+      213: -1718413316273433051
+    second: Fire_Commander_Skill_1
+  - first:
+      213: -4819653848673032494
+    second: Fire_Commander_Skill_2
+  - first:
+      213: 1031610444086675824
+    second: Fire_Commander_Skill_3
+  - first:
+      213: 75848063093410725
+    second: Fire_Commander_Skill_4
+  - first:
+      213: 2061701178163685583
+    second: Fire_Commander_Skill_5
+  - first:
+      213: -3172673645707053569
+    second: Fire_Commander_Skill_6
+  - first:
+      213: -8312171551381733168
+    second: Fire_Commander_Skill_7
+  - first:
+      213: 5623061110881310990
+    second: Fire_Commander_Skill_8
+  - first:
+      213: -2190837312659433888
+    second: Fire_Commander_Skill_9
+  - first:
+      213: -8205482299594590034
+    second: Fire_Commander_Skill_10
+  - first:
+      213: 7504988916405733009
+    second: Fire_Commander_Skill_11
+  - first:
+      213: 2704309496839156557
+    second: Fire_Commander_Skill_12
+  - first:
+      213: -425479197010847938
+    second: Fire_Commander_Skill_13
+  - first:
+      213: 8999480323996610205
+    second: Fire_Commander_Skill_14
+  - first:
+      213: -3325599884601403718
+    second: Fire_Commander_Skill_15
+  - first:
+      213: -8452824279437286670
+    second: Fire_Commander_Skill_16
+  - first:
+      213: 9115944142913051810
+    second: Fire_Commander_Skill_17
+  - first:
+      213: -757919166828347749
+    second: Fire_Commander_Skill_18
+  - first:
+      213: 480399780668026412
+    second: Fire_Commander_Skill_19
+  - first:
+      213: 2413184349488386474
+    second: Fire_Commander_Skill_20
+  - first:
+      213: 8869471290027678851
+    second: Fire_Commander_Skill_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_0
+      rect:
+        serializedVersion: 2
+        x: 281
+        y: 8
+        width: 452
+        height: 983
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac7dc19f00c9817f0800000000000000
+      internalID: -641591418906945590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_1
+      rect:
+        serializedVersion: 2
+        x: 1306
+        y: 10
+        width: 450
+        height: 980
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52698328138f628e0800000000000000
+      internalID: -1718413316273433051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_2
+      rect:
+        serializedVersion: 2
+        x: 2336
+        y: 9
+        width: 400
+        height: 980
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d6ef793c562d1db0800000000000000
+      internalID: -4819653848673032494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_3
+      rect:
+        serializedVersion: 2
+        x: 3353
+        y: 9
+        width: 391
+        height: 980
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0798e52bb34015e00800000000000000
+      internalID: 1031610444086675824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_4
+      rect:
+        serializedVersion: 2
+        x: 4311
+        y: 9
+        width: 473
+        height: 978
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ab859959677d0100800000000000000
+      internalID: 75848063093410725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_5
+      rect:
+        serializedVersion: 2
+        x: 5350
+        y: 9
+        width: 462
+        height: 980
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc863755c42ac9c10800000000000000
+      internalID: 2061701178163685583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_7
+      rect:
+        serializedVersion: 2
+        x: 6383
+        y: 12
+        width: 448
+        height: 979
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d0c8c7830c35ac80800000000000000
+      internalID: -8312171551381733168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_8
+      rect:
+        serializedVersion: 2
+        x: 7405
+        y: 11
+        width: 452
+        height: 981
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e09d460c940290e40800000000000000
+      internalID: 5623061110881310990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_9
+      rect:
+        serializedVersion: 2
+        x: 8422
+        y: 8
+        width: 457
+        height: 987
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 066534a52159891e0800000000000000
+      internalID: -2190837312659433888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_10
+      rect:
+        serializedVersion: 2
+        x: 9492
+        y: 8
+        width: 413
+        height: 983
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea8b8e1b255402e80800000000000000
+      internalID: -8205482299594590034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_11
+      rect:
+        serializedVersion: 2
+        x: 10579
+        y: 8
+        width: 341
+        height: 986
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1968b9508a3172860800000000000000
+      internalID: 7504988916405733009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_12
+      rect:
+        serializedVersion: 2
+        x: 11605
+        y: 9
+        width: 341
+        height: 979
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4330d9c823a78520800000000000000
+      internalID: 2704309496839156557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_13
+      rect:
+        serializedVersion: 2
+        x: 12637
+        y: 9
+        width: 335
+        height: 981
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3799d2bce4681af0800000000000000
+      internalID: -425479197010847938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fire_Commander_Skill_14
+      rect:
+        serializedVersion: 2
+        x: 13649
+        y: 15
+        width: 344
+        height: 975
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9e6fe26ca394ec70800000000000000
+      internalID: 8999480323996610205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 80f573e9fbdee8f48a9f78b376824a68
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Fire_Commander_Skill_0: -641591418906945590
+      Fire_Commander_Skill_1: -1718413316273433051
+      Fire_Commander_Skill_10: -8205482299594590034
+      Fire_Commander_Skill_11: 7504988916405733009
+      Fire_Commander_Skill_12: 2704309496839156557
+      Fire_Commander_Skill_13: -425479197010847938
+      Fire_Commander_Skill_14: 8999480323996610205
+      Fire_Commander_Skill_2: -4819653848673032494
+      Fire_Commander_Skill_3: 1031610444086675824
+      Fire_Commander_Skill_4: 75848063093410725
+      Fire_Commander_Skill_5: 2061701178163685583
+      Fire_Commander_Skill_7: -8312171551381733168
+      Fire_Commander_Skill_8: 5623061110881310990
+      Fire_Commander_Skill_9: -2190837312659433888
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

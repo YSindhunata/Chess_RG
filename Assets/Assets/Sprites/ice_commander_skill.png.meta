@@ -372,7 +372,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ice_commander_skill_0: -7228800236199004394
+      ice_commander_skill_1: -71412461218372178
+      ice_commander_skill_2: 5978288528722498976
+      ice_commander_skill_3: -4750301740954455671
+      ice_commander_skill_4: -4734866404248416726
+      ice_commander_skill_5: 4628859811518175494
+      ice_commander_skill_6: 7902549723328700343
+      ice_commander_skill_7: 5436577957570863987
+      ice_commander_skill_8: 1834265558691835506
+      ice_commander_skill_9: -2671014358032397791
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

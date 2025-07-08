@@ -1,31 +1,40 @@
 fileFormatVersion: 2
-guid: 75fa415e7967b3b439ed48f0cea8c6c1
+guid: fae5f2265c3ec71478944043b602b752
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5776170735201811425
-    second: ice_commander_idle_0
+      213: 6550046759504600721
+    second: Earth_Commander_Skill_0
   - first:
-      213: -5159217511606535378
-    second: ice_commander_idle_1
+      213: -4930701948207383156
+    second: Earth_Commander_Skill_1
   - first:
-      213: 243259702177857409
-    second: ice_commander_idle_2
+      213: 1984825391961568121
+    second: Earth_Commander_Skill_2
   - first:
-      213: 3370281712792100824
-    second: ice_commander_idle_3
+      213: 5885852387824750152
+    second: Earth_Commander_Skill_3
   - first:
-      213: -2948161501571492859
-    second: ice_commander_idle_4
+      213: 8695377180698042342
+    second: Earth_Commander_Skill_4
   - first:
-      213: 2722423090652640230
-    second: ice_commander_idle_5
+      213: -8524924220675449390
+    second: Earth_Commander_Skill_5
   - first:
-      213: 7239525533982063796
-    second: ice_commander_idle_6
+      213: 8123992158436707202
+    second: Earth_Commander_Skill_6
   - first:
-      213: 779601781331076257
-    second: ice_commander_idle_7
+      213: -7041819097456673173
+    second: Earth_Commander_Skill_7
+  - first:
+      213: -8986840582286449970
+    second: Earth_Commander_Skill_8
+  - first:
+      213: 7719561280345574414
+    second: Earth_Commander_Skill_9
+  - first:
+      213: 4174589386549579294
+    second: Earth_Commander_Skill_10
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -134,13 +143,101 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ice_commander_idle_0
+      name: Earth_Commander_Skill_0
       rect:
         serializedVersion: 2
-        x: 182
+        x: 200
+        y: 15
+        width: 640
+        height: 982
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19e587af2d076ea50800000000000000
+      internalID: 6550046759504600721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Earth_Commander_Skill_1
+      rect:
+        serializedVersion: 2
+        x: 1225
+        y: 12
+        width: 640
+        height: 983
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8db5cbb3b0a29bb0800000000000000
+      internalID: -4930701948207383156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Earth_Commander_Skill_2
+      rect:
+        serializedVersion: 2
+        x: 2250
+        y: 16
+        width: 638
+        height: 978
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9737b0d8d248b8b10800000000000000
+      internalID: 1984825391961568121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Earth_Commander_Skill_3
+      rect:
+        serializedVersion: 2
+        x: 3274
+        y: 16
+        width: 638
+        height: 978
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84ecda8ef8fbea150800000000000000
+      internalID: 5885852387824750152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Earth_Commander_Skill_4
+      rect:
+        serializedVersion: 2
+        x: 4296
         y: 17
-        width: 577
-        height: 986
+        width: 640
+        height: 981
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -149,20 +246,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f140a4ed15be6dfa0800000000000000
-      internalID: -5776170735201811425
+      spriteID: 6ef5b8bc97f2ca870800000000000000
+      internalID: 8695377180698042342
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ice_commander_idle_1
+      name: Earth_Commander_Skill_5
       rect:
         serializedVersion: 2
-        x: 1205
-        y: 0
-        width: 583
-        height: 1005
+        x: 5322
+        y: 17
+        width: 638
+        height: 979
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -171,20 +268,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e2bb7b50207c668b0800000000000000
-      internalID: -5159217511606535378
+      spriteID: 2dd1489969261b980800000000000000
+      internalID: -8524924220675449390
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ice_commander_idle_2
+      name: Earth_Commander_Skill_6
       rect:
         serializedVersion: 2
-        x: 2231
-        y: 11
-        width: 576
-        height: 994
+        x: 6346
+        y: 17
+        width: 638
+        height: 978
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -193,20 +290,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 18f7a78096b306300800000000000000
-      internalID: 243259702177857409
+      spriteID: 28bcda943d73eb070800000000000000
+      internalID: 8123992158436707202
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ice_commander_idle_3
+      name: Earth_Commander_Skill_7
       rect:
         serializedVersion: 2
-        x: 3255
-        y: 11
-        width: 576
-        height: 995
+        x: 7369
+        y: 16
+        width: 639
+        height: 980
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,20 +312,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8dfd7fb7c55a5ce20800000000000000
-      internalID: 3370281712792100824
+      spriteID: b6e788b07de664e90800000000000000
+      internalID: -7041819097456673173
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ice_commander_idle_4
+      name: Earth_Commander_Skill_8
       rect:
         serializedVersion: 2
-        x: 4279
-        y: 11
-        width: 576
-        height: 995
+        x: 8394
+        y: 19
+        width: 638
+        height: 975
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,20 +334,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 504595efbb60617d0800000000000000
-      internalID: -2948161501571492859
+      spriteID: ec260cfca14584380800000000000000
+      internalID: -8986840582286449970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ice_commander_idle_5
+      name: Earth_Commander_Skill_9
       rect:
         serializedVersion: 2
-        x: 5303
-        y: 11
-        width: 576
-        height: 995
+        x: 9385
+        y: 15
+        width: 748
+        height: 981
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -259,20 +356,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6e3fbae706df7c520800000000000000
-      internalID: 2722423090652640230
+      spriteID: e0c8bd0a514612b60800000000000000
+      internalID: 7719561280345574414
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ice_commander_idle_6
+      name: Earth_Commander_Skill_10
       rect:
         serializedVersion: 2
-        x: 6327
-        y: 11
-        width: 576
-        height: 994
+        x: 10417
+        y: 16
+        width: 773
+        height: 980
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,30 +378,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4bcfe53dd16f77460800000000000000
-      internalID: 7239525533982063796
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ice_commander_idle_7
-      rect:
-        serializedVersion: 2
-        x: 7351
-        y: 10
-        width: 577
-        height: 996
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1a4208a80b3b1da00800000000000000
-      internalID: 779601781331076257
+      spriteID: e1e476cddee1fe930800000000000000
+      internalID: 4174589386549579294
       vertices: []
       indices: 
       edges: []
@@ -322,15 +397,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      ice_commander_idle_0: -5776170735201811425
-      ice_commander_idle_1: -5159217511606535378
-      ice_commander_idle_2: 243259702177857409
-      ice_commander_idle_3: 3370281712792100824
-      ice_commander_idle_4: -2948161501571492859
-      ice_commander_idle_5: 2722423090652640230
-      ice_commander_idle_6: 7239525533982063796
-      ice_commander_idle_7: 779601781331076257
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

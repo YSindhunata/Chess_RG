@@ -87,6 +87,16 @@ public class Game : MonoBehaviour
     // NEW: Reference to the Animator for the black Ice Commander
     private Animator blackIceCommanderAnimator;
 
+    // NEW: Reference to the Animator for the white Earth Commander
+    private Animator whiteEarthCommanderAnimator; 
+    // NEW: Reference to the Animator for the black Earth Commander
+    private Animator blackEarthCommanderAnimator; 
+
+    // NEW: Reference to the Animator for the white Fire Commander
+    private Animator whiteFireCommanderAnimator; 
+    // NEW: Reference to the Animator for the black Fire Commander
+    private Animator blackFireCommanderAnimator; 
+
     public string GetCurrentPlayer()
     {
         return currentPlayer;
@@ -213,6 +223,7 @@ public class Game : MonoBehaviour
     }
 
     // NEW: Method to reset commander visual animation to idle
+    // NEW: Method to reset commander visual animation to idle
     private void ResetCommanderVisualAnimation()
     {
         // Reset White Commander visual animation if it's an Ice Commander
@@ -227,6 +238,23 @@ public class Game : MonoBehaviour
                     whiteIceCommanderAnimator.Play("ice_commander_idle"); // Play idle animation
                 }
             }
+            // NEW: Reset White Commander visual animation if it's an Earth Commander
+            if (skill != null && skill.skillType == CommanderSkill.SkillType.EarthStun) //
+            {
+                if (whiteEarthCommanderAnimator != null) //
+                {
+                    whiteEarthCommanderAnimator.Play("earth_commander_idle"); // Play idle animation
+                }
+            }
+
+            // NEW: Reset White Commander visual animation if it's a Fire Commander
+            if (skill != null && skill.skillType == CommanderSkill.SkillType.FireWall) //
+            {
+                if (whiteFireCommanderAnimator != null) //
+                {
+                    whiteFireCommanderAnimator.Play("fire_commander_idle"); // Play idle animation
+                }
+            }
         }
 
         // Reset Black Commander visual animation if it's an Ice Commander
@@ -239,6 +267,23 @@ public class Game : MonoBehaviour
                 if (blackIceCommanderAnimator != null)
                 {
                     blackIceCommanderAnimator.Play("ice_commander_idle"); // Play idle animation
+                }
+            }
+            // NEW: Reset Black Commander visual animation if it's an Earth Commander
+            if (skill != null && skill.skillType == CommanderSkill.SkillType.EarthStun) //
+            {
+                if (blackEarthCommanderAnimator != null) //
+                {
+                    blackEarthCommanderAnimator.Play("earth_commander_idle"); // Play idle animation
+                }
+            }
+
+            // NEW: Reset Black Commander visual animation if it's a Fire Commander
+            if (skill != null && skill.skillType == CommanderSkill.SkillType.FireWall) //
+            {
+                if (blackFireCommanderAnimator != null) //
+                {
+                    blackFireCommanderAnimator.Play("fire_commander_idle"); // Play idle animation
                 }
             }
         }
@@ -524,7 +569,24 @@ public class Game : MonoBehaviour
                         Debug.LogError("Animator tidak ditemukan di IceCommanderVisualPrefab!");
                     }
                 }
-                // Tambahkan juga untuk blackIceCommanderAnimator di bagian P2
+                // NEW: Save animator reference if commander type is earth
+                else if (p1Type == "earth")
+                {
+                    whiteEarthCommanderAnimator = commanderP1.GetComponent<Animator>();
+                    if (whiteEarthCommanderAnimator == null)
+                    {
+                        Debug.LogError("Animator tidak ditemukan di EarthCommanderVisualPrefab!");
+                    }
+                }
+                // NEW: Save animator reference if commander type is fire
+                else if (p1Type == "fire") //
+                {
+                    whiteFireCommanderAnimator = commanderP1.GetComponent<Animator>(); //
+                    if (whiteFireCommanderAnimator == null) //
+                    {
+                        Debug.LogError("Animator tidak ditemukan di FireCommanderVisualPrefab!"); //
+                    }
+                }
             }
             else
             {
@@ -555,6 +617,24 @@ public class Game : MonoBehaviour
                     if (blackIceCommanderAnimator == null)
                     {
                         Debug.LogError("Animator tidak ditemukan di IceCommanderVisualPrefab!");
+                    }
+                }
+                // NEW: Save animator reference if commander type is earth
+                else if (p2Type == "earth")
+                {
+                    blackEarthCommanderAnimator = commanderP2.GetComponent<Animator>();
+                    if (blackEarthCommanderAnimator == null)
+                    {
+                        Debug.LogError("Animator tidak ditemukan di EarthCommanderVisualPrefab!");
+                    }
+                }
+                // NEW: Save animator reference if commander type is fire
+                else if (p2Type == "fire") //
+                {
+                    blackFireCommanderAnimator = commanderP2.GetComponent<Animator>(); //
+                    if (blackFireCommanderAnimator == null) //
+                    {
+                        Debug.LogError("Animator tidak ditemukan di FireCommanderVisualPrefab!"); //
                     }
                 }
             }
@@ -702,6 +782,31 @@ public class Game : MonoBehaviour
             else if (currentPlayer == "black" && blackIceCommanderAnimator != null)
             {
                 blackIceCommanderAnimator.SetTrigger("UseSkill");
+            }
+        }
+        // NEW: Trigger skill animation for Earth Commander
+        else if (skillType == CommanderSkill.SkillType.EarthStun) //
+        {
+            if (currentPlayer == "white" && whiteEarthCommanderAnimator != null) //
+            {
+                whiteEarthCommanderAnimator.SetTrigger("UseSkill"); //
+            }
+            else if (currentPlayer == "black" && blackEarthCommanderAnimator != null) //
+            {
+                blackEarthCommanderAnimator.SetTrigger("UseSkill"); //
+            }
+        }
+
+        // NEW: Trigger skill animation for Fire Commander
+        else if (skillType == CommanderSkill.SkillType.FireWall) //
+        {
+            if (currentPlayer == "white" && whiteFireCommanderAnimator != null) //
+            {
+                whiteFireCommanderAnimator.SetTrigger("UseSkill"); //
+            }
+            else if (currentPlayer == "black" && blackFireCommanderAnimator != null) //
+            {
+                blackFireCommanderAnimator.SetTrigger("UseSkill"); //
             }
         }
 
@@ -875,6 +980,15 @@ public class Game : MonoBehaviour
                 NextTurn(); // Giliran berganti jika area tidak valid
                 UpdateCommanderCooldownUI();
             }
+            // NEW: After skill placement, reset Earth Commander animation to idle
+            if (currentPlayer == "white" && whiteEarthCommanderAnimator != null) //
+            {
+                whiteEarthCommanderAnimator.Play("earth_commander_idle"); //
+            }
+            else if (currentPlayer == "black" && blackEarthCommanderAnimator != null) //
+            {
+                blackEarthCommanderAnimator.Play("earth_commander_idle"); //
+            }
         }
     }
 
@@ -1012,6 +1126,15 @@ public class Game : MonoBehaviour
         Debug.Log("Memanggil NextTurn() setelah PlaceFireWallSkill.");
         NextTurn();
         UpdateCommanderCooldownUI();
+        // NEW: After skill placement, reset Fire Commander animation to idle
+        if (currentPlayer == "white" && whiteFireCommanderAnimator != null) //
+        {
+            whiteFireCommanderAnimator.Play("fire_commander_idle"); //
+        }
+        else if (currentPlayer == "black" && blackFireCommanderAnimator != null) //
+        {
+            blackFireCommanderAnimator.Play("fire_commander_idle"); //
+        }
     }
 
 
