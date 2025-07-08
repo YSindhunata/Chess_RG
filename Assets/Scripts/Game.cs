@@ -88,14 +88,14 @@ public class Game : MonoBehaviour
     private Animator blackIceCommanderAnimator;
 
     // NEW: Reference to the Animator for the white Earth Commander
-    private Animator whiteEarthCommanderAnimator; 
+    private Animator whiteEarthCommanderAnimator;
     // NEW: Reference to the Animator for the black Earth Commander
-    private Animator blackEarthCommanderAnimator; 
+    private Animator blackEarthCommanderAnimator;
 
     // NEW: Reference to the Animator for the white Fire Commander
-    private Animator whiteFireCommanderAnimator; 
+    private Animator whiteFireCommanderAnimator;
     // NEW: Reference to the Animator for the black Fire Commander
-    private Animator blackFireCommanderAnimator; 
+    private Animator blackFireCommanderAnimator;
 
     public string GetCurrentPlayer()
     {
@@ -105,6 +105,9 @@ public class Game : MonoBehaviour
     public void NextTurn()
     {
         Debug.Log("--- NextTurn() dipanggil --- CurrentPlayer sebelum ganti: " + currentPlayer);
+        DestroyMovePlatesForAllPieces();
+
+
         if (gameOver) return;
 
         if (inSkillPlacementMode)
@@ -220,6 +223,16 @@ public class Game : MonoBehaviour
             ShowGameOverUI();
         }
         Debug.Log("--- NextTurn() selesai --- CurrentPlayer setelah ganti: " + currentPlayer);
+    }
+
+    public void DestroyMovePlatesForAllPieces()
+    {
+        GameObject[] movePlates = GameObject.FindGameObjectsWithTag("MovePlate");
+        for (int i = 0; i < movePlates.Length; i++)
+        {
+            Destroy(movePlates[i]);
+        }
+        Debug.Log("Semua MovePlate telah dihancurkan.");
     }
 
     // NEW: Method to reset commander visual animation to idle
@@ -829,7 +842,7 @@ public class Game : MonoBehaviour
         Debug.Log("Menampilkan opsi penempatan skill untuk: " + currentSkillToPlace);
         ClearSkillPlacementPlates();
         HideOrientationButtons();
-            
+
         for (int x = 0; x < 8; x++)
         {
             for (int y = 0; y < 8; y++)
