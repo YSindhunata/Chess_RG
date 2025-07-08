@@ -251,12 +251,12 @@ TextureImporter:
       name: VFX_Fire_0
       rect:
         serializedVersion: 2
-        x: 27
+        x: 18
         y: 383
-        width: 39
-        height: 60
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -273,12 +273,12 @@ TextureImporter:
       name: VFX_Fire_5
       rect:
         serializedVersion: 2
-        x: 127
+        x: 119
         y: 382
-        width: 39
-        height: 52
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -295,12 +295,12 @@ TextureImporter:
       name: VFX_Fire_6
       rect:
         serializedVersion: 2
-        x: 223
+        x: 214
         y: 383
-        width: 39
-        height: 54
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -317,12 +317,12 @@ TextureImporter:
       name: VFX_Fire_7
       rect:
         serializedVersion: 2
-        x: 318
+        x: 312
         y: 383
-        width: 40
-        height: 55
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -339,12 +339,12 @@ TextureImporter:
       name: VFX_Fire_9
       rect:
         serializedVersion: 2
-        x: 30
+        x: 22
         y: 287
-        width: 40
-        height: 67
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -361,12 +361,12 @@ TextureImporter:
       name: VFX_Fire_11
       rect:
         serializedVersion: 2
-        x: 126
+        x: 121
         y: 287
-        width: 40
-        height: 70
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -383,12 +383,12 @@ TextureImporter:
       name: VFX_Fire_14
       rect:
         serializedVersion: 2
-        x: 223
+        x: 217
         y: 287
-        width: 36
-        height: 71
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -405,12 +405,12 @@ TextureImporter:
       name: VFX_Fire_16
       rect:
         serializedVersion: 2
-        x: 319
-        y: 268
-        width: 36
-        height: 92
+        x: 312
+        y: 287
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -427,12 +427,12 @@ TextureImporter:
       name: VFX_Fire_18
       rect:
         serializedVersion: 2
-        x: 31
+        x: 22
         y: 191
-        width: 36
-        height: 74
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -449,12 +449,12 @@ TextureImporter:
       name: VFX_Fire_20
       rect:
         serializedVersion: 2
-        x: 127
+        x: 124
         y: 191
-        width: 36
-        height: 76
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -471,12 +471,12 @@ TextureImporter:
       name: VFX_Fire_21
       rect:
         serializedVersion: 2
-        x: 223
+        x: 219
         y: 191
-        width: 42
-        height: 56
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -493,12 +493,12 @@ TextureImporter:
       name: VFX_Fire_22
       rect:
         serializedVersion: 2
-        x: 320
+        x: 315
         y: 191
-        width: 43
-        height: 52
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -515,12 +515,12 @@ TextureImporter:
       name: VFX_Fire_26
       rect:
         serializedVersion: 2
-        x: 32
+        x: 23
         y: 95
-        width: 43
-        height: 56
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -537,12 +537,12 @@ TextureImporter:
       name: VFX_Fire_27
       rect:
         serializedVersion: 2
-        x: 127
+        x: 121
         y: 95
-        width: 44
-        height: 57
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -559,12 +559,12 @@ TextureImporter:
       name: VFX_Fire_29
       rect:
         serializedVersion: 2
-        x: 222
-        y: 95
-        width: 45
-        height: 56
+        x: 218
+        y: 96
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -581,12 +581,12 @@ TextureImporter:
       name: VFX_Fire_31
       rect:
         serializedVersion: 2
-        x: 319
-        y: 95
-        width: 35
-        height: 58
+        x: 313
+        y: 96
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -603,12 +603,12 @@ TextureImporter:
       name: VFX_Fire_34
       rect:
         serializedVersion: 2
-        x: 31
+        x: 24
         y: 0
-        width: 46
-        height: 55
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -625,12 +625,12 @@ TextureImporter:
       name: VFX_Fire_36
       rect:
         serializedVersion: 2
-        x: 127
+        x: 120
         y: 0
-        width: 34
-        height: 51
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -647,12 +647,12 @@ TextureImporter:
       name: VFX_Fire_39
       rect:
         serializedVersion: 2
-        x: 223
+        x: 218
         y: 0
-        width: 47
-        height: 56
+        width: 59
+        height: 68
       alignment: 9
-      pivot: {x: 0.5305925, y: 0.738623}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
