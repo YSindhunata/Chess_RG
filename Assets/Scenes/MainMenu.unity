@@ -639,6 +639,7 @@ GameObject:
   - component: {fileID: 1009989312}
   - component: {fileID: 1009989314}
   - component: {fileID: 1009989313}
+  - component: {fileID: 1009989315}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -764,6 +765,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1009989311}
   m_CullTransparentMesh: 1
+--- !u!114 &1009989315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1009989311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 248be31c14f30914d801665589e8a4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spreadMagnitude: 178
+  hoverRadius: 345
+  animationSpeed: 10
 --- !u!1 &1082025962
 GameObject:
   m_ObjectHideFlags: 0
@@ -877,6 +893,7 @@ GameObject:
   - component: {fileID: 1348711003}
   - component: {fileID: 1348711005}
   - component: {fileID: 1348711004}
+  - component: {fileID: 1348711006}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1002,6 +1019,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348711002}
   m_CullTransparentMesh: 1
+--- !u!114 &1348711006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348711002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 248be31c14f30914d801665589e8a4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spreadMagnitude: 178
+  hoverRadius: 345
+  animationSpeed: 10
 --- !u!1 &1369336939
 GameObject:
   m_ObjectHideFlags: 0
@@ -1727,6 +1759,7 @@ GameObject:
   - component: {fileID: 2069613613}
   - component: {fileID: 2069613615}
   - component: {fileID: 2069613614}
+  - component: {fileID: 2069613616}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1852,6 +1885,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069613612}
   m_CullTransparentMesh: 1
+--- !u!114 &2069613616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069613612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 248be31c14f30914d801665589e8a4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spreadMagnitude: 178
+  hoverRadius: 345
+  animationSpeed: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

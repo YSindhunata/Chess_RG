@@ -397,7 +397,18 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Earth_Commander_Skill_0: 6550046759504600721
+      Earth_Commander_Skill_1: -4930701948207383156
+      Earth_Commander_Skill_10: 4174589386549579294
+      Earth_Commander_Skill_2: 1984825391961568121
+      Earth_Commander_Skill_3: 5885852387824750152
+      Earth_Commander_Skill_4: 8695377180698042342
+      Earth_Commander_Skill_5: -8524924220675449390
+      Earth_Commander_Skill_6: 8123992158436707202
+      Earth_Commander_Skill_7: -7041819097456673173
+      Earth_Commander_Skill_8: -8986840582286449970
+      Earth_Commander_Skill_9: 7719561280345574414
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

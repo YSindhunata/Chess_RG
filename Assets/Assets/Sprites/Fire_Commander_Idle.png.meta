@@ -372,7 +372,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Fire_Commander_Idle_0: 5598962525367600916
+      Fire_Commander_Idle_1: 6631753638957849663
+      Fire_Commander_Idle_2: -7364368348452956355
+      Fire_Commander_Idle_3: -2832918088550335494
+      Fire_Commander_Idle_4: -188611191335699417
+      Fire_Commander_Idle_5: 3846062046866234999
+      Fire_Commander_Idle_6: 4489920072576086388
+      Fire_Commander_Idle_7: -779470253784739854
+      Fire_Commander_Idle_8: 5279347207855633587
+      Fire_Commander_Idle_9: 8754908192579197715
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

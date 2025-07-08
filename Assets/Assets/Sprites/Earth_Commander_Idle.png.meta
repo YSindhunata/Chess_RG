@@ -272,7 +272,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Earth_Commander_Idle_0: -5999437753018402526
+      Earth_Commander_Idle_1: 6108852489898100000
+      Earth_Commander_Idle_2: -5815596376563062127
+      Earth_Commander_Idle_3: 2068846516617478184
+      Earth_Commander_Idle_4: 8337476208848962735
+      Earth_Commander_Idle_5: -644204230653341425
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
