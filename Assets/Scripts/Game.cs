@@ -469,15 +469,18 @@ public class Game : MonoBehaviour
         GameObject[] enemyPieces = player == "white" ? playerBlack : playerWhite;
         foreach (GameObject piece in enemyPieces)
         {
-            if (piece == null) continue;
+            if (piece == null || !piece.activeSelf) continue;
             Chessman cm = piece.GetComponent<Chessman>();
-            List<Vector2Int> enemyMoves = cm.GetPotentialMoves();
+            List<Vector2Int> enemyMoves = cm.GetAttackMoves();
+
             foreach (Vector2Int pos in enemyMoves)
             {
+                Debug.Log($"Musuh {cm.name} bisa serang {pos}"); // Tambahan debug
                 if (pos.x == x && pos.y == y)
                     return true;
             }
         }
+
         return false;
     }
 

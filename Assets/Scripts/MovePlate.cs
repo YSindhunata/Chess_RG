@@ -49,6 +49,11 @@ public class MovePlate : MonoBehaviour
         if (attack)
         {
             GameObject cp = gameController.GetPosition(matrixX, matrixY);
+            if (cp != null && cp.name.Contains("_king"))
+            {
+                Debug.LogWarning("Langkah ilegal: tidak boleh menyerang raja secara langsung!");
+                return;
+            }
             Destroy(cp);
         }
 
